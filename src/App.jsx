@@ -1,35 +1,48 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Navbar from './components/Navbar'
+import wordService from './services/words.js'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [text, setText] = useState("")
+  const [finalText, setFinalText] = useState("")
+
+  const addText = (event) => {
+    event.preventDefault();
+    wordService
+      .create(text)
+      .then(response => {
+        console.log(response)
+        setFinalText(response)
+      })
+      .catch(error => console.log(error))
+  }
+
+  const handleTextChange = (event) => {
+    console.log(event.target.value)
+    setText(event.target.value)
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <Navbar />
+      <div className="row">
+        <div className="col-md-6">
+          <form onSubmit={addText}>
+            <h5>Phonetic Punjabi</h5>
+              <textarea value={text} onChange={handleTextChange} id="phonetic" cols="30" rows="8" maxLength="20480"  spellCheck="false" placeholder="sat sri akal!" autoComplete="off" autoFocus></textarea>
+              <button type='submit'>Convert Phonetic!</button>
+          </form>
+        </div>
+        <div className="col-md-6 dropdown">
+          <h5>Converted Punjabi</h5>
+            <textarea value={finalText} cols="30" rows="8" placeholder="ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ!" spellCheck="false" autoComplete="off" readOnly ></textarea>
+            {/* <div id="myDropdown" className="dropdown-content"></div> */}
+        </div>
+        {/* <button id="copy">Copy Panjabi/ਪੰਜਾਬੀ ਕਾਪੀ ਕਰੋ</button> */}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }
+
 
 export default App
