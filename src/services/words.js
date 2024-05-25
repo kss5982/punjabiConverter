@@ -1,11 +1,10 @@
 import axios from "axios";
 const baseUrl = "/";
 
-const create = async (newSearch) => {
-  console.log("made it to service!", newSearch);
-  //   const request = await axios.post(baseUrl, "sat");
-  //   return request.then((response) => response.data);
-  return newSearch;
+const convert = async (phoneticPunjabi) => {
+  // console.log("in service", phoneticPunjabi);
+  const response = await axios.post(baseUrl, phoneticPunjabi);
+  return response.data;
 };
 
-export default { create };
+export default { convert };

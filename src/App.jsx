@@ -8,11 +8,12 @@ function App() {
 
   const addText = (event) => {
     event.preventDefault();
+    const phoneticTextarea = {payload: text}
     wordService
-      .create(text)
+      .convert(phoneticTextarea)
       .then(response => {
         console.log(response)
-        setFinalText(response)
+        setFinalText(response.payload)
       })
       .catch(error => console.log(error))
   }
