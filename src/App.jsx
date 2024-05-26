@@ -13,7 +13,7 @@ function App() {
       .convert(phoneticTextarea)
       .then(response => {
         console.log(response)
-        setFinalText(response.payload)
+        setFinalText(response)
       })
       .catch(error => console.log(error))
   }
