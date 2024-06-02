@@ -4,6 +4,7 @@ import cors from "cors";
 import morgan from "morgan";
 import mongoose from "mongoose";
 import convertRouter from "./controllers/conversion.js";
+import dictionRouter from "./controllers/dictionary.js";
 
 mongoose.set("strictQuery", false);
 
@@ -24,6 +25,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/", convertRouter);
+app.use("/", dictionRouter);
 
 // app.get("/", (request, response) => {
 //   response.send("<h1>Hello World!</h1>");
