@@ -14,19 +14,30 @@ convertRouter.post("/", async (req, res) => {
     .filter((word) => word !== "");
 
   let convertedArrayObj = [];
+  // for (const phoneticWord of phoneticTextArr) {
+  //   let convertedWord = await Word.findOne({
+  //     phonetic: phoneticWord,
+  //   });
+  //   convertedArrayObj.push(convertedWord);
+  // }
+
+  convertedArrayObj = await Word.find({ phonetic: { $in: phoneticTextArr } });
+  // console.log("in convertRouter", convertedArrayObj);
+  // let convertedArray = convertedArrayObj
+  //   .map((obj) => obj.converted[0])
+  //   .join(" ");
+
+  let convertedArray = [];
+  let convertedWord;
   for (const phoneticWord of phoneticTextArr) {
-    let convertedWord = await Word.findOne({
-      phonetic: phoneticWord,
-    });
-    convertedArrayObj.push(convertedWord);
+    convertedWord = convertedArrayObj.find(
+      (word) => word.phonetic === phoneticWord
+    );
+    console.log(convertedWord);
+    convertedArray.push(convertedWord.converted[0]);
   }
-
-  console.log("in convertRouter", convertedArrayObj);
-  let convertedArray = convertedArrayObj
-    .map((obj) => obj.converted[0])
-    .join(" ");
-
-  res.send(convertedArray);
+  console.log(convertedArray);
+  res.send(convertedArray.join(" "));
 });
 
 export default convertRouter;
