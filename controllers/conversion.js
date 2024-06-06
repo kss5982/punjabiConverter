@@ -13,7 +13,7 @@ convertRouter.post("/", async (req, res) => {
     .split(" ")
     .filter((word) => word !== "");
 
-  let convertedArrayObj = [];
+  // let convertedArrayObj = [];
   // for (const phoneticWord of phoneticTextArr) {
   //   let convertedWord = await Word.findOne({
   //     phonetic: phoneticWord,
@@ -21,6 +21,9 @@ convertRouter.post("/", async (req, res) => {
   //   convertedArrayObj.push(convertedWord);
   // }
 
+  let convertedArrayObj = [];
+  // pings database using $in clause and ignores duplicates and phonetic text order
+  // returns array of unique word objects
   convertedArrayObj = await Word.find({ phonetic: { $in: phoneticTextArr } });
   // console.log("in convertRouter", convertedArrayObj);
   // let convertedArray = convertedArrayObj
@@ -29,11 +32,13 @@ convertRouter.post("/", async (req, res) => {
 
   let convertedArray = [];
   let convertedWord;
+  // iterates through original phonetic array and finds the correct conversion from returned array of objects
   for (const phoneticWord of phoneticTextArr) {
     convertedWord = convertedArrayObj.find(
       (word) => word.phonetic === phoneticWord
     );
-    console.log(convertedWord);
+    // console.log(convertedWord);
+    // this is a substitute value at the moment must be altered.
     convertedArray.push(convertedWord.converted[0]);
   }
   console.log(convertedArray);
