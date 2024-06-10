@@ -7,18 +7,15 @@ const convertRouter = express.Router();
 
 convertRouter.post("/", async (req, res) => {
   // console.log("in convertRouter", request.body);
-
   // converts payload into array of lowercase strings w/out spaces
   let phoneticTextArr = await req.body.payload
     .toLowerCase()
     .split(" ")
     .filter((word) => word !== "");
 
-  let convertedArrayObj = [];
   // pings database using $in clause and ignores duplicates and phonetic text order
   // returns array of unique word objects
-  // convertedArrayObj = await Word.find({ phonetic: { $in: phoneticTextArr } });
-  convertedArrayObj = await Word.aggregate().search({
+  let convertedArrayObj = await Word.aggregate().search({
     text: {
       query: phoneticTextArr,
       path: "phonetic",
@@ -29,7 +26,7 @@ convertRouter.post("/", async (req, res) => {
 
   let convertedArray = [];
   const options = {
-    // Search in `author` and in `tags` array
+    // Search in "phonetic" property
     keys: ["phonetic"],
     threshold: 0.3,
   };
