@@ -10,9 +10,10 @@ convertRouter.post("/", async (req, res) => {
   // converts payload into array of lowercase strings w/out spaces
   let phoneticTextArr = await req.body.payload
     .toLowerCase()
-    .split(" ")
+    .split(/\s*\b\s*/)
     .filter((word) => word !== "");
 
+  console.log(phoneticTextArr);
   // pings database using $in clause and ignores duplicates and phonetic text order
   // returns array of unique word objects
   let convertedArrayObj = await Word.aggregate().search({
@@ -22,7 +23,7 @@ convertRouter.post("/", async (req, res) => {
       fuzzy: { maxEdits: 1, prefixLength: 1 },
     },
   });
-  console.log(convertedArrayObj);
+  // console.log(convertedArrayObj);
 
   let convertedArray = [];
   const options = {
@@ -36,21 +37,29 @@ convertRouter.post("/", async (req, res) => {
     let convertedWord = convertedArrayObj.find(
       (word) => word.phonetic === phoneticWord
     );
-    console.log(convertedWord);
+    // console.log(convertedWord);
     // if exact value doesn't match from DB, perform second fuzzy search
     if (!convertedWord) {
       convertedWord = fuse.search(phoneticWord);
       console.log("2nd fuzzy search", convertedWord);
-      convertedArray.push(convertedWord[0].item.converted[0]);
-      console.log(convertedArray);
+      // if 2nd fuzzy search has content, then append value
+      if (convertedWord.length > 0) {
+        convertedArray.push(convertedWord[0].item.converted[0]);
+      }
+      // if 2nd fuzzy search has nothing, then append phonetic value
+      else {
+        console.log(phoneticWord);
+        convertedArray.push(phoneticWord);
+      }
+      // console.log(convertedArray);
     }
     // console.log(convertedWord);
-    // this is a substitute value at the moment must be altered.
-    else {
+    // appends converted value from exact match
+    else if (convertedWord.converted[0]) {
       convertedArray.push(convertedWord.converted[0]);
     }
   }
-  console.log(convertedArray);
+  // console.log(convertedArray);
   res.send(convertedArray.join(" "));
 });
 
