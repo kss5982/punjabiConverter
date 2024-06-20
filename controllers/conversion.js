@@ -11,7 +11,6 @@ convertRouter.post("/", async (req, res) => {
   // converts payload into array of lowercase strings w/out spaces
   let phoneticTextArr = await req.body.payload
     .trim()
-    .toLowerCase()
     .split(/( |\n|\b)/)
     .filter((word) => word !== "" && word !== " ");
 
