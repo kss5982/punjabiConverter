@@ -4,7 +4,7 @@ import Word from "../models/dictionaryWord.js";
 
 const dictionRouter = express.Router();
 
-dictionRouter.get("/dictionary", async (req, res) => {
+dictionRouter.get("/", async (req, res) => {
   let allWords = await Word.find({});
   Array.prototype.sortBy = function (p) {
     return this.slice(0).sort(function (a, b) {
@@ -12,7 +12,7 @@ dictionRouter.get("/dictionary", async (req, res) => {
     });
   };
   allWords = allWords.sortBy("phonetic");
-  res.send("allWords");
+  res.send(allWords);
 });
 
 export default dictionRouter;
