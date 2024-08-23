@@ -7,10 +7,23 @@ const convert = async (phoneticPunjabi) => {
   return response.data;
 };
 
+const addToDict = async (wordsToBeAdded) => {
+  // console.log("in service", phoneticPunjabi);
+  console.log("in axios:", wordsToBeAdded);
+  const response = await axios.post("/api/dictionary", wordsToBeAdded);
+  return response.data;
+};
+
 const getDictionary = async () => {
   // console.log("in service", phoneticPunjabi);
   const response = await axios.get("/api/dictionary");
   return response.data;
 };
 
-export default { convert, getDictionary };
+const getDictionaryWord = async (id) => {
+  // console.log("in service", phoneticPunjabi);
+  const response = await axios.get(`/api/dictionary/${id}`);
+  return response.data;
+};
+
+export default { convert, getDictionary, addToDict, getDictionaryWord };

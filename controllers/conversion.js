@@ -9,29 +9,66 @@ const convertRouter = express.Router();
 convertRouter.post("/", async (req, res) => {
   // console.log("in convertRouter", request.body);
   // converts payload into array of lowercase strings w/out spaces
-  let phoneticTextArr = await req.body.payload
+  const phoneticTextArr = await req.body.payload
     .trim()
     .split(/( |\n|\b)/)
     .filter((word) => word !== "" && word !== " ");
 
-  console.log(phoneticTextArr);
+  // console.log(phoneticTextArr);
+  let copyOfPhoneticArray = phoneticTextArr.slice();
+  let convertedArrayObj = [];
+  let fuzzySearch = [];
+  // console.log("Array length: ", phoneticTextArr.length);
+  // console.log(
+  //   "Projected iterations: ",
+  //   Math.floor(phoneticTextArr.length / 100)
+  // );
+  for (let i = 0; i <= Math.floor(phoneticTextArr.length / 100); i++) {
+    if (i === Math.floor(phoneticTextArr.length / 100)) {
+      console.log("iteration value: ", i);
+      console.log("final loop!");
+
+      fuzzySearch = await Word.aggregate().search({
+        text: {
+          query: copyOfPhoneticArray.splice(0, 100),
+          path: "phonetic",
+          fuzzy: { maxEdits: 1, prefixLength: 3 },
+        },
+      });
+      convertedArrayObj.push(fuzzySearch);
+      // console.log(convertedArrayObj);
+    } else {
+      console.log("iteration value: ", i);
+      fuzzySearch = await Word.aggregate().search({
+        text: {
+          query: copyOfPhoneticArray.splice(0, 100),
+          path: "phonetic",
+          fuzzy: { maxEdits: 1, prefixLength: 3 },
+        },
+      });
+      convertedArrayObj.push(fuzzySearch);
+      // console.log(convertedArrayObj);
+    }
+  }
+
   // pings database using $in clause and ignores duplicates and phonetic text order
   // returns array of unique word objects
-  let convertedArrayObj = await Word.aggregate().search({
-    text: {
-      query: phoneticTextArr,
-      path: "phonetic",
-      fuzzy: { maxEdits: 1, prefixLength: 1 },
-    },
-  });
-  // console.log(convertedArrayObj);
+  // let convertedArrayObj = await Word.aggregate().search({
+  //   text: {
+  //     query: phoneticTextArr,
+  //     path: "phonetic",
+  //     fuzzy: { maxEdits: 1, prefixLength: 3 },
+  //   },
+  // });
+  // .limit(5);
+  // console.log("fuzzy search:", convertedArrayObj);
 
   // configures FuseJS fuzzy search
   const options = {
     keys: ["phonetic"],
     threshold: 0.3,
   };
-  const fuse = new Fuse(convertedArrayObj, options);
+  const fuse = new Fuse(convertedArrayObj.flat(1), options);
   // iterates through original phonetic array and finds the correct conversion from returned array of objects
   let convertedArray = [];
   for (const phoneticWord of phoneticTextArr) {
@@ -42,14 +79,14 @@ convertRouter.post("/", async (req, res) => {
     // if exact value doesn't match from DB, perform second fuzzy search
     if (!convertedWord && !punctuation.includes(phoneticWord)) {
       convertedWord = fuse.search(phoneticWord);
-      console.log("2nd fuzzy search", phoneticWord);
+      // console.log("2nd fuzzy search", phoneticWord);
       // if 2nd fuzzy search has content, then append value
       if (convertedWord.length > 0) {
         convertedArray.push(convertedWord[0].item.converted[0]);
       }
       // if 2nd fuzzy search has nothing, then append phonetic value
       else {
-        console.log(phoneticWord);
+        // console.log(phoneticWord);
         convertedArray.push(phoneticWord);
       }
       // console.log(convertedArray);
@@ -64,12 +101,12 @@ convertRouter.post("/", async (req, res) => {
   }
   // console.log(convertedArray);
   let finalText = convertedArray.join(" ");
-  console.log("before regex", finalText);
+  // console.log("before regex", finalText);
   finalText = finalText
-    .replace(/\s(?=!|\?|\.|,|\)|\]|\}|@|%|\^|\*|\+|_|`|~|\/|\\)/g, "")
-    .replace(/(?<=\(|\{|\[|#|\$)\s/g, "")
-    .replace(/" *([^"]*?) *"/g, '"$1"')
-    .replace(/' *([^']*?) *'/g, "'$1'");
+    .replace(/\s(?=!|\?|\.|,|\)|\]|\}|@|%|\^|\*|\+|_|~|\/|\\)/g, "")
+    .replace(/(?<=\(|\{|\[|#|\$|'|`)\s/g, "")
+    .replace(/" *([^"]*?) *"/g, '"$1"');
+  // .replace(/' *([^']*?) *'/g, "'$1'");
   // .replace(/["|'](\s).*?(\s)["|']/g, "");
   // .replace(/(?<="|')\s(?!"|')/g, "");
   // .replace(/(?<!"|')\s(?="|')/g, "");
@@ -79,7 +116,7 @@ convertRouter.post("/", async (req, res) => {
   //   );
   // }
   // finalText = removeSpaceBtwnQuotes(finalText);
-  console.log("after regex", finalText);
+  // console.log("after regex", finalText);
   const finalObject = {
     converted: finalText,
   };
