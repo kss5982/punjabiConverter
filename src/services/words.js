@@ -26,4 +26,15 @@ const getDictionaryWord = async (id) => {
   return response.data;
 };
 
-export default { convert, getDictionary, addToDict, getDictionaryWord };
+const deleteDicWord = async (id) => {
+  const response = await axios.delete(`/api/dictionary/${id}`);
+  return response.data;
+};
+
+export default {
+  convert,
+  getDictionary,
+  addToDict,
+  getDictionaryWord,
+  deleteDicWord,
+};

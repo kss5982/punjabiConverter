@@ -23,6 +23,12 @@ dictionRouter.get("/:id", async (req, res) => {
   res.send(word);
 });
 
+dictionRouter.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+  await Word.findByIdAndDelete(id);
+  res.status(200);
+});
+
 dictionRouter.post("/", async (req, res) => {
   console.log("request body:", req.body);
   let english = await req.body.phonetic.trim().toLowerCase().split(" ");

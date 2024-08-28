@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 // import Navbar from './components/Navbar'
 import wordService from './services/words.js'
-import { BrowserRouter as Router, Routes, Route, Link, useMatch } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Link, useMatch, Navigate } from 'react-router-dom'
 
 
 const Home = ({ addText, text, handleTextChange, finalText }) => {
@@ -24,7 +24,7 @@ const Home = ({ addText, text, handleTextChange, finalText }) => {
   )
 }
 
-const Dictionary = ({ setDictionary, allWords, addToDictionary, handleDictTextChange, dictText, handlePunjabiTextChange, punjabiWord }) => {
+const Dictionary = ({ setDictionary, allWords, addToDictionary, handleDictTextChange, dictText, handlePunjabiTextChange, punjabiWord, filterWord, handleFilter, displayFilter}) => {
   //maybe useEffect to grab dictionary on click?
   useEffect(() => {
     setDictionary()
@@ -42,8 +42,11 @@ const Dictionary = ({ setDictionary, allWords, addToDictionary, handleDictTextCh
         </form>
       </div>
       <p>Dictionary size: {allWords.length} words</p>
-      { <ul>
-        {allWords.map(word =>
+      <label htmlFor='filter'>Filter Dictionary</label>
+      <input id='filter' value={filterWord} onChange={handleFilter}/>
+      <p>Filtered words: {filterWord.length === 0 ? 0 : displayFilter.length} words</p>
+      {filterWord !== "" &&<ul>
+        {displayFilter.map(word =>
           <li key={word._id}>
             <Link to={`/dictionary/${word._id}`}>{word.phonetic}</Link>
           </li>
@@ -53,7 +56,7 @@ const Dictionary = ({ setDictionary, allWords, addToDictionary, handleDictTextCh
   )
 }
 
-const Word = ({getOneWord, dictWord, dictWordConverted}) => {
+const Word = ({getOneWord, dictWord, dictWordConverted, deleteWord}) => {
   const match = useMatch('/dictionary/:id')
   useEffect(() => {
     getOneWord(match.params.id)
@@ -66,6 +69,7 @@ const Word = ({getOneWord, dictWord, dictWordConverted}) => {
           <li key={index}>{word}</li>
         )} 
       </ul>
+      <Link to={`/dictionary`}><button onClick={() => deleteWord(match.params.id)}>Delete</button></Link>
     </>
   )
 }
@@ -78,6 +82,7 @@ function App() {
   const [punjabiWord, setPunjabiWord] = useState("")
   const [dictWord, setDictWord] = useState({})
   const [dictWordConverted, setDictWordConverted] = useState([])
+  const [filterWord, setFilterWord] = useState("")
 
   const addText = (event) => {
     event.preventDefault();
@@ -128,6 +133,27 @@ function App() {
     .catch(error => console.log(error))
   }
   
+  const handleFilter = (event) => {
+   console.log(event.target.value)
+   setFilterWord(event.target.value)
+  }
+
+  const filterList = (words, criteria) => {
+    const filtered = words.filter(word => word.phonetic.toLowerCase().startsWith(criteria.toLowerCase()));
+    return filtered;
+  }
+  let displayFilter = filterList(allWords, filterWord)
+
+  const deleteWord = async (id) => {
+    console.log("id:", id)
+    await wordService
+    .deleteDicWord(id)
+    .then(response => {
+      console.log("deleted word:", response)
+    })
+    .catch(error => console.log(error))
+  }
+
   const addToDictionary = (event) => {
     event.preventDefault();
     setDictText("")
@@ -166,8 +192,8 @@ function App() {
       </nav>
       <Routes>
         <Route path="/" element={<Home addText={addText} text={text} handleTextChange={handleTextChange} finalText={finalText}/>} />
-        <Route path="/dictionary" element={<Dictionary setDictionary={setDictionary} addToDictionary={addToDictionary} allWords={allWords} dictText={dictText} handleDictTextChange={handleDictTextChange} handlePunjabiTextChange={handlePunjabiTextChange} punjabiWord={punjabiWord}/>} />
-        <Route path="/dictionary/:id" element={<Word getOneWord={getOneWord} dictWord={dictWord} dictWordConverted={dictWordConverted}/>}/>
+        <Route path="/dictionary" element={<Dictionary setDictionary={setDictionary} addToDictionary={addToDictionary} allWords={allWords} dictText={dictText} handleDictTextChange={handleDictTextChange} handlePunjabiTextChange={handlePunjabiTextChange} punjabiWord={punjabiWord} filterWord={filterWord} handleFilter={handleFilter} displayFilter={displayFilter}/>} />
+        <Route path="/dictionary/:id" element={<Word getOneWord={getOneWord} dictWord={dictWord} dictWordConverted={dictWordConverted} deleteWord={deleteWord}/>}/>
       </Routes>
     </Router>
   )
