@@ -83,6 +83,7 @@ function App() {
   const [dictWord, setDictWord] = useState({})
   const [dictWordConverted, setDictWordConverted] = useState([])
   const [filterWord, setFilterWord] = useState("")
+  const [dropdown, setDropdown] = useState([])
 
   const addText = (event) => {
     event.preventDefault();
@@ -92,6 +93,7 @@ function App() {
       .then(response => {
         console.log(response)
         setFinalText(response.converted)
+        setDropdown(response.dropdown)
       })
       .catch(error => console.log(error))
   }
