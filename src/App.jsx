@@ -4,9 +4,9 @@ import wordService from './services/words.js'
 import { BrowserRouter as Router, Routes, Route, Link, useMatch, Navigate } from 'react-router-dom'
 
 
-const Home = ({ addText, text, handleTextChange, finalText }) => {
+const Home = ({ addText, text, handleTextChange }) => {
   return (
-    <div className="row">
+      <div className="row">
         <div className="col-md-6">
           <form onSubmit={addText}>
             <h5>Phonetic Punjabi</h5>
@@ -14,11 +14,11 @@ const Home = ({ addText, text, handleTextChange, finalText }) => {
               <button type='submit'>Convert Phonetic!</button>
           </form>
         </div>
-        <div className="col-md-6 dropdown">
+        {/* <div className="col-md-6 dropdown">
           <h5>Converted Punjabi</h5>
-            <textarea value={finalText} cols="30" rows="8" placeholder="ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ!" spellCheck="false" autoComplete="off" readOnly ></textarea>
+            <textarea value={finalText} cols="30" rows="8" placeholder="ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ!" spellCheck="false" autoComplete="off" readOnly ></textarea> */}
             {/* <div id="myDropdown" className="dropdown-content"></div> */}
-        </div>
+        {/* </div> */}
         {/* <button id="copy">Copy Panjabi/ਪੰਜਾਬੀ ਕਾਪੀ ਕਰੋ</button> */}
       </div>
   )
@@ -76,7 +76,7 @@ const Word = ({getOneWord, dictWord, dictWordConverted, deleteWord}) => {
 
 function App() {
   const [text, setText] = useState("")
-  const [finalText, setFinalText] = useState("")
+  // const [finalText, setFinalText] = useState("")
   const [allWords, setAllWords] = useState([])
   const [dictText, setDictText] = useState("")
   const [punjabiWord, setPunjabiWord] = useState("")
@@ -92,7 +92,7 @@ function App() {
       .convert(phoneticTextarea)
       .then(response => {
         console.log(response)
-        setFinalText(response.converted)
+        setText(response.converted)
         setDropdown(response.dropdown)
       })
       .catch(error => console.log(error))
@@ -193,7 +193,7 @@ function App() {
         </div>
       </nav>
       <Routes>
-        <Route path="/" element={<Home addText={addText} text={text} handleTextChange={handleTextChange} finalText={finalText}/>} />
+        <Route path="/" element={<Home addText={addText} text={text} handleTextChange={handleTextChange}/>} />
         <Route path="/dictionary" element={<Dictionary setDictionary={setDictionary} addToDictionary={addToDictionary} allWords={allWords} dictText={dictText} handleDictTextChange={handleDictTextChange} handlePunjabiTextChange={handlePunjabiTextChange} punjabiWord={punjabiWord} filterWord={filterWord} handleFilter={handleFilter} displayFilter={displayFilter}/>} />
         <Route path="/dictionary/:id" element={<Word getOneWord={getOneWord} dictWord={dictWord} dictWordConverted={dictWordConverted} deleteWord={deleteWord}/>}/>
       </Routes>
