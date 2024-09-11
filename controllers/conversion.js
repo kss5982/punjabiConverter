@@ -11,7 +11,7 @@ convertRouter.post("/", async (req, res) => {
   // converts payload into array of lowercase strings w/out spaces
   const phoneticTextArr = await req.body.payload
     .trim()
-    .split(/( |\n|\b)/)
+    .split(/( |\n|[_]|\b)/)
     .filter((word) => word !== "" && word !== " ");
 
   // console.log(phoneticTextArr);
@@ -104,8 +104,8 @@ convertRouter.post("/", async (req, res) => {
   let finalText = convertedArray.join(" ");
   // console.log("before regex", finalText);
   finalText = finalText
-    .replace(/\s(?=!|\?|\.|,|\)|\]|\}|@|%|\^|\*|\+|_|~|\/|\\)/g, "")
-    .replace(/(?<=\(|\{|\[|#|\$|'|`)\s/g, "")
+    .replace(/\s(?=!|\?|\.|,|\)|\]|\}|@|%|\^|\*|\+|_|~|\/|\\|l|I|\|)/g, "") //removes space before character
+    .replace(/(?<=\(|\{|\[|#|\$|'|`|_)\s/g, "") //removes space after character
     .replace(/" *([^"]*?) *"/g, '"$1"');
 
   const finalObject = {
