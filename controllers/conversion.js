@@ -98,9 +98,9 @@ convertRouter.post("/", async (req, res) => {
   }
   // console.log(convertedArray);
   // console.log(finalObjectList);
-  for (let index = 0; index < finalObjectList.length; index++) {
-    console.log(finalObjectList[index]);
-  }
+  // for (let index = 0; index < finalObjectList.length; index++) {
+  //   console.log(finalObjectList[index]);
+  // }
   let finalText = convertedArray.join(" ");
   // console.log("before regex", finalText);
   finalText = finalText
