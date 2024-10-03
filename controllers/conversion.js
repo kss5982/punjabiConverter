@@ -59,9 +59,8 @@ convertRouter.post("/", async (req, res) => {
     if (!convertedWord && !punctuation.includes(phoneticWord)) {
       convertedWord = fuse.search(phoneticWord);
       // console.log("2nd fuzzy search", phoneticWord);
-      // if 2nd fuzzy search has content, then append value
+      // check if 2nd fuzzy search has content
       if (convertedWord.length > 0) {
-        // console.log(convertedWord);
         convertedArray.push(convertedWord[0].item.converted[0]);
         //adds non-duplicate object into array as part of response (dropdown)
         if (
@@ -80,33 +79,15 @@ convertRouter.post("/", async (req, res) => {
       // console.log(convertedArray);
     }
     // console.log(convertedWord);
-    // appends converted value from exact match
-    else if (convertedWord && convertedWord.converted[0]) {
-      // console.log(convertedWord);
-      convertedArray.push(convertedWord.converted[0]);
-      //adds non-duplicate object into array as part of response (dropdown)
-      if (
-        !finalObjectList.some(
-          (word) => word.item.phonetic === convertedWord[0].item.phonetic
-        )
-      ) {
-        finalObjectList.push(convertedWord[0]);
-      }
-    } else {
-      convertedArray.push(phoneticWord);
-    }
   }
   // console.log(convertedArray);
   // console.log(finalObjectList);
-  // for (let index = 0; index < finalObjectList.length; index++) {
-  //   console.log(finalObjectList[index]);
-  // }
   let finalText = convertedArray.join(" ");
   // console.log("before regex", finalText);
   finalText = finalText
     .replace(/\s(?=!|\?|\.|,|\)|\]|\}|@|%|\^|\*|\+|_|~|\/|\\|l|I|\|)/g, "") //removes space before character
     .replace(/(?<=\(|\{|\[|#|\$|'|`|_)\s/g, "") //removes space after character
-    .replace(/" *([^"]*?) *"/g, '"$1"');
+    .replace(/" *([^"]*?) *"/g, '"$1"'); //removes spaces between quotes
 
   const finalObject = {
     converted: finalText,
