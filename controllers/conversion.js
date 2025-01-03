@@ -77,7 +77,8 @@ convertRouter.post("/", async (req, res) => {
         convertedArray.push(phoneticWord);
       }
       // console.log(convertedArray);
-    }
+      // adds punctuation back into the array
+    } else convertedArray.push(phoneticWord);
     // console.log(convertedWord);
   }
   // console.log(convertedArray);
