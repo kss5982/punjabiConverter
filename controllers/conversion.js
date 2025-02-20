@@ -26,7 +26,7 @@ convertRouter.post("/", async (req, res) => {
       text: {
         query: copyOfPhoneticArray.splice(0, 100),
         path: "phonetic",
-        fuzzy: { maxEdits: 2, prefixLength: 1 },
+        fuzzy: { maxEdits: 1, prefixLength: 1 },
       },
     });
     convertedArrayObj.push(fuzzySearch);
@@ -62,6 +62,7 @@ convertRouter.post("/", async (req, res) => {
           dropDownKey = convertedWord[0].item.phonetic;
           dropDownKeys.push(dropDownKey);
           dropDownValues = convertedWord[0].item.converted;
+          dropDownValues.push(dropDownKey);
 
           finalObjectList.push({ [dropDownKey]: dropDownValues });
         }
