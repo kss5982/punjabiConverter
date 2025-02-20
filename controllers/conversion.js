@@ -19,22 +19,14 @@ convertRouter.post("/", async (req, res) => {
   let convertedArrayObj = [];
   let fuzzySearch = [];
   // console.log("Array length: ", phoneticTextArr.length);
-  // console.log(
-  //   "Projected iterations: ",
-  //   Math.floor(phoneticTextArr.length / 100)
-  // );
+  // sends ~100 words max to database at a time from total phonetic words
   for (let i = 0; i <= Math.floor(phoneticTextArr.length / 100); i++) {
-    // console.log("iteration value: ", i);
-    // if (i === Math.floor(phoneticTextArr.length / 100)) {
-    //   console.log("final loop!");
-    // }
-    // pings database using $in clause and ignores duplicates and phonetic text order
-    // returns array of unique word objects
+    // pings database and returns a large array of objects
     fuzzySearch = await Word.aggregate().search({
       text: {
         query: copyOfPhoneticArray.splice(0, 100),
         path: "phonetic",
-        fuzzy: { maxEdits: 1, prefixLength: 3 },
+        fuzzy: { maxEdits: 2, prefixLength: 1 },
       },
     });
     convertedArrayObj.push(fuzzySearch);
@@ -49,6 +41,9 @@ convertRouter.post("/", async (req, res) => {
   const fuse = new Fuse(convertedArrayObj.flat(1), options);
   // iterates through original phonetic array and finds the correct conversion from returned array of objects
   let convertedArray = [];
+  let dropDownKey;
+  let dropDownKeys = [];
+  let dropDownValues = [];
   let finalObjectList = [];
   for (const phoneticWord of phoneticTextArr) {
     let convertedWord = convertedArrayObj.find(
@@ -63,12 +58,12 @@ convertRouter.post("/", async (req, res) => {
       if (convertedWord.length > 0) {
         convertedArray.push(convertedWord[0].item.converted[0]);
         //adds non-duplicate object into array as part of response (dropdown)
-        if (
-          !finalObjectList.some(
-            (word) => word.item.phonetic === convertedWord[0].item.phonetic
-          )
-        ) {
-          finalObjectList.push(convertedWord[0]);
+        if (!dropDownKeys.includes(phoneticWord)) {
+          dropDownKey = convertedWord[0].item.phonetic;
+          dropDownKeys.push(dropDownKey);
+          dropDownValues = convertedWord[0].item.converted;
+
+          finalObjectList.push({ [dropDownKey]: dropDownValues });
         }
       }
       // if 2nd fuzzy search has nothing, then append phonetic value
@@ -86,9 +81,9 @@ convertRouter.post("/", async (req, res) => {
   let finalText = convertedArray.join(" ");
   console.log("before regex", finalText);
   finalText = finalText
-    .replace(/\s(?=!|\?|\.|,|\)|\]|\}|@|%|\^|\*|\+|_|~|\/|\\|l|I|\|)/g, "") //removes space before character
-    .replace(/(?<=\(|\{|\[|#|\$|'|`|_)\s/g, "") //removes space after character
-    .replace(/" *([^"]*?) *"/g, '"$1"'); //removes spaces between quotes
+    .replace(/\s(?=!|\?|\.|,|\)|\]|\}|@|%|\^|\*|\+|_|~|\/|\\|l|I|\|)/g, "") // removes space before character
+    .replace(/(?<=\(|\{|\[|#|\$|'|`|_)\s/g, "") // removes space after character
+    .replace(/" *([^"]*?) *"/g, '"$1"'); // removes spaces between quotes
 
   const finalObject = {
     converted: finalText,
