@@ -83,7 +83,7 @@ function App() {
   const [dictWord, setDictWord] = useState({})
   const [dictWordConverted, setDictWordConverted] = useState([])
   const [filterWord, setFilterWord] = useState("")
-  const [fullResponse, setFullResponse] = useState([])
+  const [dropdownList, setDropdownList] = useState([])
 
   const addText = (event) => {
     event.preventDefault();
@@ -93,22 +93,32 @@ function App() {
       .then(response => {
         console.log(response)
         setText(response.converted)
-        setFullResponse(response.dropdowns)
+        accumulateDropdowns(response.dropdowns)
       })
       .catch(error => console.log(error))
   }
 
-  // const accumulateDropdowns = (convertedArrays) => {
-  //   if (dropdowns.length === 0) {
-  //     setDropdowns(convertedArrays)
-  //   } else {
-  //     for (let i = 0; i < dropdowns.length; i++) {
-  //       if (!dropdowns.includes(convertedArrays[i])) {
-  //         setDropdowns([...dropdowns,convertedArrays[i]])
-  //       }
-  //     }
-  //   }
-  // }
+  // this will add only unique values to the droplist
+  const accumulateDropdowns = (convertedArrays) => {
+    if (dropdownList.length === 0) {
+      setDropdownList(convertedArrays)
+    } else {
+      let mainDropdown = JSON.stringify(dropdownList)
+      let collectedDropdown = [];
+      // console.log("main dropdown:", mainDropdown)
+      for (let i = 0; i < convertedArrays.length; i++) {
+        let testDropdown = JSON.stringify(convertedArrays[i])
+        // console.log("test dropdown:", testDropdown)
+        let testForPresence = mainDropdown.indexOf(testDropdown)
+        // console.log("test", testForPresence)
+        if (testForPresence === -1) {
+          collectedDropdown.push(convertedArrays[i])
+        }
+      }
+      setDropdownList([...dropdownList, ...collectedDropdown])
+    }
+    // console.log(dropdownList)
+  }
 
   const handleTextChange = (event) => {
     console.log(event.target.value)
