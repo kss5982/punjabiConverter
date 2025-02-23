@@ -98,6 +98,18 @@ function App() {
       .catch(error => console.log(error))
   }
 
+  // const accumulateDropdowns = (convertedArrays) => {
+  //   if (dropdowns.length === 0) {
+  //     setDropdowns(convertedArrays)
+  //   } else {
+  //     for (let i = 0; i < dropdowns.length; i++) {
+  //       if (!dropdowns.includes(convertedArrays[i])) {
+  //         setDropdowns([...dropdowns,convertedArrays[i]])
+  //       }
+  //     }
+  //   }
+  // }
+
   const handleTextChange = (event) => {
     console.log(event.target.value)
     setText(event.target.value)

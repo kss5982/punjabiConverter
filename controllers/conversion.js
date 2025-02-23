@@ -41,10 +41,9 @@ convertRouter.post("/", async (req, res) => {
   const fuse = new Fuse(convertedArrayObj.flat(1), options);
   // iterates through original phonetic array and finds the correct conversion from returned array of objects
   let convertedArray = [];
-  let dropDownKey;
-  let dropDownKeys = [];
+  let uniquePhonetics = [];
   let dropDownValues = [];
-  let finalObjectList = [];
+  let finalConvertedArrays = [];
   for (const phoneticWord of phoneticTextArr) {
     let convertedWord = convertedArrayObj.find(
       (word) => word.phonetic === phoneticWord
@@ -56,15 +55,17 @@ convertRouter.post("/", async (req, res) => {
       // console.log("2nd fuzzy search", phoneticWord);
       // check if 2nd fuzzy search has content
       if (convertedWord.length > 0) {
+        //convertedWord[0].item.converted[0] is the array of coverted values
         convertedArray.push(convertedWord[0].item.converted[0]);
         //adds non-duplicate object into array as part of response (dropdown)
-        if (!dropDownKeys.includes(phoneticWord)) {
-          dropDownKey = convertedWord[0].item.phonetic;
-          dropDownKeys.push(dropDownKey);
+        if (!uniquePhonetics.includes(phoneticWord)) {
+          // tracks all unique instances of phonetics words in textarea
+          uniquePhonetics.push(convertedWord[0].item.phonetic);
+          // creates an array with the best fuzzy match converted values + phonetic word
           dropDownValues = convertedWord[0].item.converted;
-          dropDownValues.push(dropDownKey);
+          dropDownValues.push(convertedWord[0].item.phonetic);
 
-          finalObjectList.push({ [dropDownKey]: dropDownValues });
+          finalConvertedArrays.push(dropDownValues);
         }
       }
       // if 2nd fuzzy search has nothing, then append phonetic value
@@ -78,7 +79,7 @@ convertRouter.post("/", async (req, res) => {
     // console.log(convertedWord);
   }
   // console.log(convertedArray);
-  // console.log(finalObjectList);
+  // console.log(finalConvertedArrays);
   let finalText = convertedArray.join(" ");
   console.log("before regex", finalText);
   finalText = finalText
@@ -88,7 +89,7 @@ convertRouter.post("/", async (req, res) => {
 
   const finalObject = {
     converted: finalText,
-    dropdown: finalObjectList,
+    dropdowns: finalConvertedArrays,
   };
   res.send(finalObject);
 });
