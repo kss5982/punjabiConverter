@@ -81,10 +81,10 @@ convertRouter.post("/", async (req, res) => {
   // console.log(convertedArray);
   // console.log(finalConvertedArrays);
   let finalText = convertedArray.join(" ");
-  console.log("before regex", finalText);
+  // console.log("before regex", finalText);
   finalText = finalText
     .replace(/\s(?=!|\?|\.|,|\)|\]|\}|@|%|\^|\*|\+|_|~|\/|\\|l|I|\|)/g, "") // removes space before character
-    .replace(/(?<=\(|\{|\[|#|\$|'|`|_)\s/g, "") // removes space after character
+    .replace(/(?<=\(|\{|\[|#|\$|'|`|_|\n)\s/g, "") // removes space after character
     .replace(/" *([^"]*?) *"/g, '"$1"'); // removes spaces between quotes
 
   const finalObject = {
