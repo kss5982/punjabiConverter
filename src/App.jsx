@@ -4,7 +4,7 @@ import wordService from './services/words.js'
 import { BrowserRouter as Router, Routes, Route, Link, useMatch, Navigate } from 'react-router-dom'
 
 
-const Home = ({ addText, text, handleTextChange }) => {
+const Home = ({ addText, text, handleTextChange, handleTextClick, finalText}) => {
   return (
       <div className="row">
         <div className="col-md-6">
@@ -14,11 +14,11 @@ const Home = ({ addText, text, handleTextChange }) => {
               <button type='submit'>Convert Phonetic!</button>
           </form>
         </div>
-        {/* <div className="col-md-6 dropdown">
+        <div className="col-md-6 dropdown">
           <h5>Converted Punjabi</h5>
-            <textarea value={finalText} cols="30" rows="8" placeholder="ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ!" spellCheck="false" autoComplete="off" readOnly ></textarea> */}
+            <textarea value={finalText} onClick={handleTextClick} cols="30" rows="8" placeholder="ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ!" spellCheck="false" autoComplete="off" readOnly ></textarea>
             {/* <div id="myDropdown" className="dropdown-content"></div> */}
-        {/* </div> */}
+        </div>
         {/* <button id="copy">Copy Panjabi/ਪੰਜਾਬੀ ਕਾਪੀ ਕਰੋ</button> */}
       </div>
   )
@@ -76,7 +76,8 @@ const Word = ({getOneWord, dictWord, dictWordConverted, deleteWord}) => {
 
 function App() {
   const [text, setText] = useState("")
-  // const [finalText, setFinalText] = useState("")
+  const [finalText, setFinalText] = useState("")
+  const [splitFinal, setSplitFinal] = useState([])
   const [allWords, setAllWords] = useState([])
   const [dictText, setDictText] = useState("")
   const [punjabiWord, setPunjabiWord] = useState("")
@@ -92,37 +93,52 @@ function App() {
       .convert(phoneticTextarea)
       .then(response => {
         console.log(response)
-        setText(response.converted)
-        accumulateDropdowns(response.dropdowns)
+        setSplitFinal(response.splitFinal)
+        setFinalText(response.converted)
+        setDropdownList(response.dropdowns)
       })
       .catch(error => console.log(error))
   }
 
   // this will add only unique values to the droplist
-  const accumulateDropdowns = (convertedArrays) => {
-    if (dropdownList.length === 0) {
-      setDropdownList(convertedArrays)
-    } else {
-      let mainDropdown = JSON.stringify(dropdownList)
-      let collectedDropdown = [];
-      // console.log("main dropdown:", mainDropdown)
-      for (let i = 0; i < convertedArrays.length; i++) {
-        let testDropdown = JSON.stringify(convertedArrays[i])
-        // console.log("test dropdown:", testDropdown)
-        let testForPresence = mainDropdown.indexOf(testDropdown)
-        // console.log("test", testForPresence)
-        if (testForPresence === -1) {
-          collectedDropdown.push(convertedArrays[i])
-        }
-      }
-      setDropdownList([...dropdownList, ...collectedDropdown])
-    }
-    // console.log(dropdownList)
-  }
+  // const accumulateDropdowns = (convertedArrays) => {
+  //   if (dropdownList.length === 0) {
+  //     setDropdownList(convertedArrays)
+  //   } else {
+  //     let mainDropdown = JSON.stringify(dropdownList)
+  //     let collectedDropdown = [];
+  //     // console.log("main dropdown:", mainDropdown)
+  //     for (let i = 0; i < convertedArrays.length; i++) {
+  //       let testDropdown = JSON.stringify(convertedArrays[i])
+  //       // console.log("test dropdown:", testDropdown)
+  //       let testForPresence = mainDropdown.indexOf(testDropdown)
+  //       // console.log("test", testForPresence)
+  //       if (testForPresence === -1) {
+  //         collectedDropdown.push(convertedArrays[i])
+  //       }
+  //     }
+  //     setDropdownList([...dropdownList, ...collectedDropdown])
+  //   }
+  //   console.log(dropdownList)
+  // }
 
   const handleTextChange = (event) => {
     console.log(event.target.value)
     setText(event.target.value)
+  }
+
+  const getTextareaWord = (selectionStart, value) => {
+    let sum = 0
+    for (let i = 0; i < splitFinal.length; i++) {
+      sum += splitFinal[i].length + 1
+      if (sum > selectionStart) return splitFinal[i]
+    }
+  }
+
+  const handleTextClick = (event) => {
+    let i = event.target.selectionStart
+    console.log(getTextareaWord(i, finalText))
+    // console.log(event.target.selectionStart)
   }
 
   const handleDictTextChange = (event) => {
@@ -215,7 +231,7 @@ function App() {
         </div>
       </nav>
       <Routes>
-        <Route path="/" element={<Home addText={addText} text={text} handleTextChange={handleTextChange}/>} />
+        <Route path="/" element={<Home addText={addText} text={text} finalText={finalText} handleTextChange={handleTextChange} handleTextClick={handleTextClick}/>} />
         <Route path="/dictionary" element={<Dictionary setDictionary={setDictionary} addToDictionary={addToDictionary} allWords={allWords} dictText={dictText} handleDictTextChange={handleDictTextChange} handlePunjabiTextChange={handlePunjabiTextChange} punjabiWord={punjabiWord} filterWord={filterWord} handleFilter={handleFilter} displayFilter={displayFilter}/>} />
         <Route path="/dictionary/:id" element={<Word getOneWord={getOneWord} dictWord={dictWord} dictWordConverted={dictWordConverted} deleteWord={deleteWord}/>}/>
       </Routes>
