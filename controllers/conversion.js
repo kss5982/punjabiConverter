@@ -1,4 +1,4 @@
-import express, { json } from "express";
+import express from "express";
 import "express-async-errors";
 import Word from "../models/dictionaryWord.js";
 import Fuse from "fuse.js";
@@ -14,7 +14,7 @@ convertRouter.post("/", async (req, res) => {
     .split(/( |\n|[_]|\b)/)
     .filter((word) => word !== "" && word !== " ");
 
-  console.log(phoneticTextArr);
+  // console.log(phoneticTextArr);
   let copyOfPhoneticArray = phoneticTextArr.slice();
   let convertedArrayObj = [];
   let fuzzySearch = [];

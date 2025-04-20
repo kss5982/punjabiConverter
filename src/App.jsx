@@ -4,7 +4,7 @@ import wordService from './services/words.js'
 import { BrowserRouter as Router, Routes, Route, Link, useMatch, Navigate } from 'react-router-dom'
 
 
-const Home = ({ addText, text, handleTextChange, handleTextClick, finalText}) => {
+const Home = ({ addText, text, handleTextChange, handleTextClick, selectedDropdown, finalText}) => {
   return (
       <div className="row">
         <div className="col-md-6">
@@ -17,7 +17,11 @@ const Home = ({ addText, text, handleTextChange, handleTextClick, finalText}) =>
         <div className="col-md-6 dropdown">
           <h5>Converted Punjabi</h5>
             <textarea value={finalText} onClick={handleTextClick} cols="30" rows="8" placeholder="ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ!" spellCheck="false" autoComplete="off" readOnly ></textarea>
-            {/* <div id="myDropdown" className="dropdown-content"></div> */}
+            <div id="myDropdown" className="dropdown-content">
+            {selectedDropdown.map((dropDownItem, i) => (
+                <div key={i}>{dropDownItem}</div>
+              ))}
+            </div>
         </div>
         {/* <button id="copy">Copy Panjabi/ਪੰਜਾਬੀ ਕਾਪੀ ਕਰੋ</button> */}
       </div>
@@ -78,13 +82,14 @@ function App() {
   const [text, setText] = useState("")
   const [finalText, setFinalText] = useState("")
   const [splitFinal, setSplitFinal] = useState([])
+  const [dropdownList, setDropdownList] = useState([])
+  const [selectedDropdown, setSelectedDropdown] = useState([])
   const [allWords, setAllWords] = useState([])
   const [dictText, setDictText] = useState("")
   const [punjabiWord, setPunjabiWord] = useState("")
   const [dictWord, setDictWord] = useState({})
   const [dictWordConverted, setDictWordConverted] = useState([])
   const [filterWord, setFilterWord] = useState("")
-  const [dropdownList, setDropdownList] = useState([])
 
   const addText = (event) => {
     event.preventDefault();
@@ -127,18 +132,29 @@ function App() {
     setText(event.target.value)
   }
 
-  const getTextareaWord = (selectionStart, value) => {
+  const getDropdownMenu = (index) => {
+    setSelectedDropdown(dropdownList[index])
+    return dropdownList[index]
+  }
+
+  const getTextareaWordAndDropdown = (selectionStart) => {
     let sum = 0
     for (let i = 0; i < splitFinal.length; i++) {
       sum += splitFinal[i].length + 1
-      if (sum > selectionStart) return splitFinal[i]
+      if (sum > selectionStart) {
+        console.log("dropdown list: ", getDropdownMenu(i))
+        return splitFinal[i]
+      }
     }
   }
 
   const handleTextClick = (event) => {
     let i = event.target.selectionStart
-    console.log(getTextareaWord(i, finalText))
-    // console.log(event.target.selectionStart)
+    // console.log(i)
+    // stops dropdown menu from showing if clicking on blank text area
+    if (i !== finalText.length) {
+      console.log(getTextareaWordAndDropdown(i, finalText))
+    }
   }
 
   const handleDictTextChange = (event) => {
@@ -231,7 +247,7 @@ function App() {
         </div>
       </nav>
       <Routes>
-        <Route path="/" element={<Home addText={addText} text={text} finalText={finalText} handleTextChange={handleTextChange} handleTextClick={handleTextClick}/>} />
+        <Route path="/" element={<Home addText={addText} text={text} finalText={finalText} handleTextChange={handleTextChange} handleTextClick={handleTextClick} selectedDropdown={selectedDropdown}/>} />
         <Route path="/dictionary" element={<Dictionary setDictionary={setDictionary} addToDictionary={addToDictionary} allWords={allWords} dictText={dictText} handleDictTextChange={handleDictTextChange} handlePunjabiTextChange={handlePunjabiTextChange} punjabiWord={punjabiWord} filterWord={filterWord} handleFilter={handleFilter} displayFilter={displayFilter}/>} />
         <Route path="/dictionary/:id" element={<Word getOneWord={getOneWord} dictWord={dictWord} dictWordConverted={dictWordConverted} deleteWord={deleteWord}/>}/>
       </Routes>
