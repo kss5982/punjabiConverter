@@ -66,7 +66,7 @@ convertRouter.post("/", async (req, res) => {
           // if it does, then add 2nd possible value and onwards into dropdown menu (don't need first)
           dropDownValues = Array.from(convertedWord[0].item.converted.slice(1));
         }
-        dropDownValues.push(convertedWord[0].item.phonetic);
+        dropDownValues.push(phoneticWord);
         // console.log(dropDownValues);
         finalDropDownMenu.push(dropDownValues);
       }
@@ -89,7 +89,7 @@ convertRouter.post("/", async (req, res) => {
   let finalText = convertedArray.join(" ");
   // console.log("before regex", finalText);
   finalText = finalText
-    .replace(/\s(?=!|\?|\.|,|\)|\]|\}|@|%|\^|\*|\+|_|~|\/|\\|l|I|\|)/g, "") // removes space before character
+    .replace(/\s(?=!|\?|\.|:|,|\)|\]|\}|@|%|\^|\*|\+|_|~|\/|\\|l|I|\|)/g, "") // removes space before character
     .replace(/(?<=\(|\{|\[|#|\$|'|`|_|\n)\s/g, "") // removes space after character
     .replace(/" *([^"]*?) *"/g, '"$1"'); // removes spaces between quotes
 

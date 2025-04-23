@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 // import Navbar from './components/Navbar'
 import wordService from './services/words.js'
 import { BrowserRouter as Router, Routes, Route, Link, useMatch, Navigate } from 'react-router-dom'
 
 
-const Home = ({ addText, text, handleTextChange, handleTextClick, selectedDropdown, finalText}) => {
+const Home = ({ addText, text, handleTextChange, handleTextClick, selectedDropdown,handleDropDownClick, visible, finalText, divRef}) => {
   return (
       <div className="row">
         <div className="col-md-6">
@@ -17,9 +17,9 @@ const Home = ({ addText, text, handleTextChange, handleTextClick, selectedDropdo
         <div className="col-md-6 dropdown">
           <h5>Converted Punjabi</h5>
             <textarea value={finalText} onClick={handleTextClick} cols="30" rows="8" placeholder="ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ!" spellCheck="false" autoComplete="off" readOnly ></textarea>
-            <div id="myDropdown" className="dropdown-content">
-            {selectedDropdown.map((dropDownItem, i) => (
-                <div key={i}>{dropDownItem}</div>
+            <div ref={divRef} style={{width: 'fit-content'}} id="myDropdown" className="dropdown-content">
+              {visible && selectedDropdown.map((dropDownItem, i) => (
+                <div key={i} onClick={handleDropDownClick}>{dropDownItem}</div>
               ))}
             </div>
         </div>
@@ -84,6 +84,8 @@ function App() {
   const [splitFinal, setSplitFinal] = useState([])
   const [dropdownList, setDropdownList] = useState([])
   const [selectedDropdown, setSelectedDropdown] = useState([])
+  const [dropdownVisible, setDropdownVisible] = useState(false)
+  const divRef = useRef(null);
   const [allWords, setAllWords] = useState([])
   const [dictText, setDictText] = useState("")
   const [punjabiWord, setPunjabiWord] = useState("")
@@ -104,28 +106,6 @@ function App() {
       })
       .catch(error => console.log(error))
   }
-
-  // this will add only unique values to the droplist
-  // const accumulateDropdowns = (convertedArrays) => {
-  //   if (dropdownList.length === 0) {
-  //     setDropdownList(convertedArrays)
-  //   } else {
-  //     let mainDropdown = JSON.stringify(dropdownList)
-  //     let collectedDropdown = [];
-  //     // console.log("main dropdown:", mainDropdown)
-  //     for (let i = 0; i < convertedArrays.length; i++) {
-  //       let testDropdown = JSON.stringify(convertedArrays[i])
-  //       // console.log("test dropdown:", testDropdown)
-  //       let testForPresence = mainDropdown.indexOf(testDropdown)
-  //       // console.log("test", testForPresence)
-  //       if (testForPresence === -1) {
-  //         collectedDropdown.push(convertedArrays[i])
-  //       }
-  //     }
-  //     setDropdownList([...dropdownList, ...collectedDropdown])
-  //   }
-  //   console.log(dropdownList)
-  // }
 
   const handleTextChange = (event) => {
     console.log(event.target.value)
@@ -151,10 +131,30 @@ function App() {
   const handleTextClick = (event) => {
     let i = event.target.selectionStart
     // console.log(i)
-    // stops dropdown menu from showing if clicking on blank text area
+    // stops dropdown menu from showing if clicking cx past last word
     if (i !== finalText.length) {
-      console.log(getTextareaWordAndDropdown(i, finalText))
+      console.log("textarea word:", getTextareaWordAndDropdown(i, finalText))
+      setDropdownVisible(true)
     }
+  }
+
+  const handleClickOutside = (event) => {
+    if (divRef.current && !divRef.current.contains(event.target)) {
+      setDropdownVisible(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+
+  const handleDropDownClick = (event) => {
+    console.log("dropdown: value", event.target.textContent)
+    setDropdownVisible(false)
   }
 
   const handleDictTextChange = (event) => {
@@ -247,7 +247,7 @@ function App() {
         </div>
       </nav>
       <Routes>
-        <Route path="/" element={<Home addText={addText} text={text} finalText={finalText} handleTextChange={handleTextChange} handleTextClick={handleTextClick} selectedDropdown={selectedDropdown}/>} />
+        <Route path="/" element={<Home addText={addText} text={text} finalText={finalText} handleTextChange={handleTextChange} handleTextClick={handleTextClick} selectedDropdown={selectedDropdown} handleDropDownClick={handleDropDownClick} visible={dropdownVisible} divRef={divRef}/>} />
         <Route path="/dictionary" element={<Dictionary setDictionary={setDictionary} addToDictionary={addToDictionary} allWords={allWords} dictText={dictText} handleDictTextChange={handleDictTextChange} handlePunjabiTextChange={handlePunjabiTextChange} punjabiWord={punjabiWord} filterWord={filterWord} handleFilter={handleFilter} displayFilter={displayFilter}/>} />
         <Route path="/dictionary/:id" element={<Word getOneWord={getOneWord} dictWord={dictWord} dictWordConverted={dictWordConverted} deleteWord={deleteWord}/>}/>
       </Routes>
