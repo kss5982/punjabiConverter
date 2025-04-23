@@ -10,7 +10,7 @@ const Home = ({ addText, text, handleTextChange, handleTextClick, selectedDropdo
         <div className="col-md-6">
           <form onSubmit={addText}>
             <h5>Phonetic Punjabi</h5>
-              <textarea value={text} onChange={handleTextChange} cols="30" rows="8" maxLength="20480"  spellCheck="false" placeholder="sat sri akal!" autoComplete="off" autoFocus></textarea>
+              <textarea value={text} onChange={handleTextChange} cols="30" rows="8" maxLength="20480"  spellCheck="false" placeholder="sat sri akal!" autoComplete="off" autoFocus required></textarea>
               <button type='submit'>Convert Phonetic!</button>
           </form>
         </div>
@@ -117,6 +117,7 @@ function App() {
     return dropdownList[index]
   }
 
+  // extracts clicked word from textarea
   const getTextareaWordAndDropdown = (selectionStart) => {
     let sum = 0
     for (let i = 0; i < splitFinal.length; i++) {
@@ -128,6 +129,7 @@ function App() {
     }
   }
 
+  // extracts clicked word from textarea
   const handleTextClick = (event) => {
     let i = event.target.selectionStart
     // console.log(i)
@@ -138,12 +140,14 @@ function App() {
     }
   }
 
+  // used for making dropdown disappear
   const handleClickOutside = (event) => {
     if (divRef.current && !divRef.current.contains(event.target)) {
       setDropdownVisible(false);
     }
   };
 
+  // required for making dropdown disappear when clicking outside of it
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
@@ -152,6 +156,7 @@ function App() {
   }, []);
 
 
+  // extracts value from dropdown menu
   const handleDropDownClick = (event) => {
     console.log("dropdown: value", event.target.textContent)
     setDropdownVisible(false)
