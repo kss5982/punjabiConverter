@@ -79,19 +79,27 @@ const Word = ({getOneWord, dictWord, dictWordConverted, deleteWord}) => {
 }
 
 function App() {
-  const [text, setText] = useState("")
-  const [finalText, setFinalText] = useState("")
-  const [splitFinal, setSplitFinal] = useState([])
-  const [dropdownList, setDropdownList] = useState([])
-  const [selectedDropdown, setSelectedDropdown] = useState([])
-  const [dropdownVisible, setDropdownVisible] = useState(false)
-  const divRef = useRef(null);
+  const [text, setText] = useState("") // phonetic punjabi string
+  // const [finalText, setFinalText] = useState("") // complete converted string
+  const [splitFinal, setSplitFinal] = useState([]) // converted strings in array
+  const [dropdownList, setDropdownList] = useState([]) // list of all dropdown arrays in an array
+  const [selectedConverted, setSelectedConverted] = useState("") // clicked converted word
+  const [selectedDropdown, setSelectedDropdown] = useState([]) // selected dropdown menu
+  const [dropdownWord, setDropdownWord] = useState("") // clicked dropdown word
+  const [convertedIndex, setConvertedIndex] = useState() // retains position of clicked word
+  const [dropdownVisible, setDropdownVisible] = useState(false) // toggles dropdown div
+  const divRef = useRef(null); // required for detecting clicks outside dropdown div
+  // below are states used in the 'dictionary' portion of the site
   const [allWords, setAllWords] = useState([])
   const [dictText, setDictText] = useState("")
   const [punjabiWord, setPunjabiWord] = useState("")
   const [dictWord, setDictWord] = useState({})
   const [dictWordConverted, setDictWordConverted] = useState([])
   const [filterWord, setFilterWord] = useState("")
+
+  // renderes final converted text
+  useEffect(() => {
+  }, [splitFinal])
 
   const addText = (event) => {
     event.preventDefault();
@@ -101,7 +109,7 @@ function App() {
       .then(response => {
         console.log(response)
         setSplitFinal(response.splitFinal)
-        setFinalText(response.converted)
+        // setFinalText(response.converted)
         setDropdownList(response.dropdowns)
       })
       .catch(error => console.log(error))
@@ -112,30 +120,48 @@ function App() {
     setText(event.target.value)
   }
 
-  const getDropdownMenu = (index) => {
+  // selected dropdown menu is properly rendered as state variable
+  useEffect(() => {
+    console.log("selected dropdown: ", selectedDropdown)
+  }, [selectedDropdown])
+
+  // selected dropdown menu is properly rendered as state variable
+  useEffect(() => {
+    console.log("index in list of dropdowns: ", convertedIndex)
+  }, [convertedIndex])
+  
+  // returns proper dropdown menu from clicked word
+  const getDropdownMenuAndIndex = (index) => {
     setSelectedDropdown(dropdownList[index])
+    setConvertedIndex(index)
     return dropdownList[index]
   }
 
-  // extracts clicked word from textarea
+  // uses clicked word to find the relevant dropdown menu
   const getTextareaWordAndDropdown = (selectionStart) => {
     let sum = 0
     for (let i = 0; i < splitFinal.length; i++) {
       sum += splitFinal[i].length + 1
       if (sum > selectionStart) {
-        console.log("dropdown list: ", getDropdownMenu(i))
+        getDropdownMenuAndIndex(i)
         return splitFinal[i]
       }
     }
   }
 
-  // extracts clicked word from textarea
+  // selected converted word is properly rendered as state variable
+  useEffect(() => {
+    console.log("textarea converted word:", selectedConverted)
+  }, [selectedConverted])
+
+  // identifies clicked word from textarea
   const handleTextClick = (event) => {
     let i = event.target.selectionStart
     // console.log(i)
-    // stops dropdown menu from showing if clicking cx past last word
-    if (i !== finalText.length) {
-      console.log("textarea word:", getTextareaWordAndDropdown(i, finalText))
+    // stops dropdown menu from showing if clicking past last word
+    if (i !== splitFinal.join(" ").length) {
+      // console.log("textarea word:", getTextareaWordAndDropdown(i, finalText))
+      setSelectedConverted(getTextareaWordAndDropdown(i))
       setDropdownVisible(true)
     }
   }
@@ -155,10 +181,44 @@ function App() {
     };
   }, []);
 
+  // renders list of dropdowns
+  useEffect(() => {
+  }, [dropdownList])
+
+  const swapWordFromDropdown = (index, dropdownWord) => {
+    let copySplitFinal = [...splitFinal]
+    let copyAllDropdowns = [...dropdownList]
+    let copyDropdownMenu = [...selectedDropdown]
+    let dropdownPosition = copyDropdownMenu.indexOf(dropdownWord)
+    
+    // replaces word in converted textarea w/ dropdown word
+    console.log(index, dropdownWord)
+    copySplitFinal[index] = dropdownWord
+    console.log("copySplitFinal: ", copySplitFinal)
+    
+    // replaces selected dropdown word with original converted word
+    copyDropdownMenu[dropdownPosition] = selectedConverted
+    console.log("copyDropdownMenu: ", copyDropdownMenu)
+
+    // updates list of dropdowns to reflect change in selected dropdown
+    copyAllDropdowns[convertedIndex] = copyDropdownMenu
+    console.log("copyAllDropdowns: ", copyAllDropdowns)
+
+    setSplitFinal(copySplitFinal)
+    setDropdownList(copyAllDropdowns)
+  }
+
+// selected dropdown word is properly rendered as state variable
+  useEffect(() => {
+    console.log("selected dropdown word:", dropdownWord)
+    swapWordFromDropdown(convertedIndex, dropdownWord)
+  }, [dropdownWord])
 
   // extracts value from dropdown menu
   const handleDropDownClick = (event) => {
-    console.log("dropdown: value", event.target.textContent)
+    // console.log("dropdown: value", event.target.textContent)
+    setDropdownWord(event.target.textContent)
+    // console.log("dropdown value:", dropdownWord)
     setDropdownVisible(false)
   }
 
@@ -252,13 +312,12 @@ function App() {
         </div>
       </nav>
       <Routes>
-        <Route path="/" element={<Home addText={addText} text={text} finalText={finalText} handleTextChange={handleTextChange} handleTextClick={handleTextClick} selectedDropdown={selectedDropdown} handleDropDownClick={handleDropDownClick} visible={dropdownVisible} divRef={divRef}/>} />
+        <Route path="/" element={<Home addText={addText} text={text} finalText={splitFinal.join(" ")} handleTextChange={handleTextChange} handleTextClick={handleTextClick} selectedDropdown={selectedDropdown} handleDropDownClick={handleDropDownClick} visible={dropdownVisible} divRef={divRef}/>} />
         <Route path="/dictionary" element={<Dictionary setDictionary={setDictionary} addToDictionary={addToDictionary} allWords={allWords} dictText={dictText} handleDictTextChange={handleDictTextChange} handlePunjabiTextChange={handlePunjabiTextChange} punjabiWord={punjabiWord} filterWord={filterWord} handleFilter={handleFilter} displayFilter={displayFilter}/>} />
         <Route path="/dictionary/:id" element={<Word getOneWord={getOneWord} dictWord={dictWord} dictWordConverted={dictWordConverted} deleteWord={deleteWord}/>}/>
       </Routes>
     </Router>
   )
 }
-
 
 export default App

@@ -94,7 +94,7 @@ convertRouter.post("/", async (req, res) => {
     .replace(/" *([^"]*?) *"/g, '"$1"'); // removes spaces between quotes
 
   const finalObject = {
-    converted: finalText,
+    // converted: finalText,
     splitFinal: finalText.split(" "),
     dropdowns: finalDropDownMenu,
   };
