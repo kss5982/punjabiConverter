@@ -18,6 +18,7 @@ textarea {
 */
 
 
-.covertedTextDiv {
-    outline: 2px solid black;
+.dropdownItem {
+    outline: 1px solid black;
+    text-align: center;
 }

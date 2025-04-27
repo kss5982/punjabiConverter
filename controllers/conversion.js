@@ -3,6 +3,7 @@ import "express-async-errors";
 import Word from "../models/dictionaryWord.js";
 import Fuse from "fuse.js";
 import punctuation from "../utils/puntuation.js";
+import { emojiPattern, compactEmojiPattern } from "regex-combined-emojis";
 
 const convertRouter = express.Router();
 
@@ -35,20 +36,26 @@ convertRouter.post("/", async (req, res) => {
 
   // configures FuseJS fuzzy search
   const options = {
+    shouldSort: true,
     keys: ["phonetic"],
     threshold: 0.3,
   };
   const fuse = new Fuse(convertedArrayObj.flat(1), options);
+  // console.log(fuse);
   // iterates through original phonetic array and finds the correct conversion from returned array of objects
   // convertedArray will be used in REGEX (first value of dropdown)
   let convertedArray = [];
   let finalDropDownMenu = [];
   for (const phoneticWord of phoneticTextArr) {
-    // let convertedWord = convertedArrayObj
-    //   .flat(1)
-    //   .find((word) => word.phonetic === phoneticWord);
-    // console.log(convertedWord);
-    // console.log(convertedArrayObj);
+    let exactExists;
+    let initialSearch = convertedArrayObj
+      .flat(1)
+      .find((word) => word.phonetic === phoneticWord);
+    console.log("converted word object:", initialSearch);
+    if (initialSearch) {
+      exactExists = true;
+    }
+    // console.log( convertedArrayObj);
     // if exact value doesn't match from DB, perform second fuzzy search
     if (!punctuation.includes(phoneticWord)) {
       let convertedWord = fuse.search(phoneticWord);
@@ -65,6 +72,12 @@ convertRouter.post("/", async (req, res) => {
         if (convertedWord[0].item.converted.length > 1) {
           // if it does, then add 2nd possible value and onwards into dropdown menu (don't need first)
           dropDownValues = Array.from(convertedWord[0].item.converted.slice(1));
+          console.log(dropDownValues);
+        }
+        // add additional dropdown suggestions
+        if (fuse._docs[1] && !exactExists) {
+          dropDownValues.push(...fuse._docs[1].converted);
+          console.log("dropdown values", dropDownValues);
         }
         dropDownValues.push(phoneticWord);
         // console.log(dropDownValues);
@@ -75,6 +88,8 @@ convertRouter.post("/", async (req, res) => {
         // console.log(phoneticWord);
         // add unidentified word to dropdowns if its actually an alphanumeric value (not punctuation/symbols)
         if (/^[a-zA-Z0-9]+$/.test(phoneticWord)) {
+          finalDropDownMenu.push([phoneticWord]);
+        } else if (new RegExp(emojiPattern, "g").test(phoneticWord)) {
           finalDropDownMenu.push([phoneticWord]);
         }
         convertedArray.push(phoneticWord);

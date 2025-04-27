@@ -11,18 +11,18 @@ const Home = ({ addText, text, handleTextChange, handleTextClick, selectedDropdo
           <form onSubmit={addText}>
             <h5>Phonetic Punjabi</h5>
               <textarea value={text} onChange={handleTextChange} cols="30" rows="8" maxLength="20480"  spellCheck="false" placeholder="sat sri akal!" autoComplete="off" autoFocus required></textarea>
-              <button type='submit'>Convert Phonetic!</button>
+              <button type='submit'>Convert Punjabi!</button>
           </form>
         </div>
-        <div className="col-md-6 dropdown">
-          <h5>Converted Punjabi</h5>
+        <div className="col-md-6">
+          <h5>Converted (Click words!)</h5>
             <textarea value={finalText} onClick={handleTextClick} cols="30" rows="8" placeholder="ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ!" spellCheck="false" autoComplete="off" readOnly ></textarea>
-            <div ref={divRef} style={{width: 'fit-content'}} id="myDropdown" className="dropdown-content">
+            <div ref={divRef} style={{width: 'fit-content'}} id="dropdownContainer">
               {visible && selectedDropdown.map((dropDownItem, i) => (
-                <div key={i} onClick={handleDropDownClick}>{dropDownItem}</div>
-              ))}
-            </div>
-        </div>
+                <div className='dropdownItem' key={i} onClick={handleDropDownClick}>{dropDownItem}</div>
+            ))}
+          </div>
+      </div>
         {/* <button id="copy">Copy Panjabi/ਪੰਜਾਬੀ ਕਾਪੀ ਕਰੋ</button> */}
       </div>
   )
