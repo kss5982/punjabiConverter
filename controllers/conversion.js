@@ -76,6 +76,7 @@ convertRouter.post("/", async (req, res) => {
         }
         // add additional dropdown suggestions
         if (fuse._docs[1] && !exactExists) {
+          // console.log(fuse._docs);
           dropDownValues.push(...fuse._docs[1].converted);
           console.log("dropdown values", dropDownValues);
         }

@@ -1,170 +1,259 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from "react";
 // import Navbar from './components/Navbar'
-import wordService from './services/words.js'
-import { BrowserRouter as Router, Routes, Route, Link, useMatch, Navigate } from 'react-router-dom'
+import wordService from "./services/words.js";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  useMatch,
+  Navigate,
+} from "react-router-dom";
 
-
-const Home = ({ addText, text, handleTextChange, handleTextClick, selectedDropdown,handleDropDownClick, visible, finalText, divRef}) => {
+const Home = ({
+  addText,
+  text,
+  handleTextChange,
+  handleTextClick,
+  selectedDropdown,
+  handleDropDownClick,
+  visible,
+  finalText,
+  divRef,
+}) => {
   return (
-      <div className="row">
-        <div className="col-md-6">
-          <form onSubmit={addText}>
-            <h5>Phonetic Punjabi</h5>
-              <textarea value={text} onChange={handleTextChange} cols="30" rows="8" maxLength="20480"  spellCheck="false" placeholder="sat sri akal!" autoComplete="off" autoFocus required></textarea>
-              <button type='submit'>Convert Punjabi!</button>
-          </form>
-        </div>
-        <div className="col-md-6">
-          <h5>Converted (Click words!)</h5>
-            <textarea value={finalText} onClick={handleTextClick} cols="30" rows="8" placeholder="ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ!" spellCheck="false" autoComplete="off" readOnly ></textarea>
-            <div ref={divRef} style={{width: 'fit-content'}} id="dropdownContainer">
-              {visible && selectedDropdown.map((dropDownItem, i) => (
-                <div className='dropdownItem' key={i} onClick={handleDropDownClick}>{dropDownItem}</div>
+    <div className="row">
+      <div className="col-md-6">
+        <form onSubmit={addText}>
+          <h5>Phonetic Punjabi</h5>
+          <textarea
+            value={text}
+            onChange={handleTextChange}
+            cols="30"
+            rows="8"
+            maxLength="20480"
+            spellCheck="false"
+            placeholder="sat sri akal!"
+            autoComplete="off"
+            autoFocus
+            required
+          ></textarea>
+          <button type="submit">Convert Punjabi!</button>
+        </form>
+      </div>
+      <div className="col-md-6">
+        <h5>Converted (Click words!)</h5>
+        <textarea
+          value={finalText}
+          onClick={handleTextClick}
+          cols="30"
+          rows="8"
+          placeholder="ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ!"
+          spellCheck="false"
+          autoComplete="off"
+          readOnly
+        ></textarea>
+        <div
+          ref={divRef}
+          style={{ width: "fit-content" }}
+          id="dropdownContainer"
+        >
+          {visible &&
+            selectedDropdown.map((dropDownItem, i) => (
+              <div
+                className="dropdownItem"
+                key={i}
+                onClick={handleDropDownClick}
+              >
+                {dropDownItem}
+              </div>
             ))}
-          </div>
+        </div>
       </div>
-        {/* <button id="copy">Copy Panjabi/ਪੰਜਾਬੀ ਕਾਪੀ ਕਰੋ</button> */}
-      </div>
-  )
-}
+      {/* <button id="copy">Copy Panjabi/ਪੰਜਾਬੀ ਕਾਪੀ ਕਰੋ</button> */}
+    </div>
+  );
+};
 
-const Dictionary = ({ setDictionary, allWords, addToDictionary, handleDictTextChange, dictText, handlePunjabiTextChange, punjabiWord, filterWord, handleFilter, displayFilter}) => {
+const Dictionary = ({
+  setDictionary,
+  allWords,
+  addToDictionary,
+  handleDictTextChange,
+  dictText,
+  handlePunjabiTextChange,
+  punjabiWord,
+  filterWord,
+  handleFilter,
+  displayFilter,
+}) => {
   //maybe useEffect to grab dictionary on click?
   useEffect(() => {
-    setDictionary()
-  }, [])
-  
+    setDictionary();
+  }, []);
+
   return (
     <>
-      <div className='row'>
+      <div className="row">
         <form onSubmit={addToDictionary}>
           <label htmlFor="dictPhone">Phonetic Word(s)</label>
-          <textarea value={dictText} onChange={handleDictTextChange} id="dictPhone" cols="30" rows="8" spellCheck="false" placeholder="add space-separated phonetic words here" autoComplete="off" autoFocus></textarea>
+          <textarea
+            value={dictText}
+            onChange={handleDictTextChange}
+            id="dictPhone"
+            cols="30"
+            rows="8"
+            spellCheck="false"
+            placeholder="add space-separated phonetic words here"
+            autoComplete="off"
+            autoFocus
+          ></textarea>
           <label htmlFor="dictConverted">Punjabi Word</label>
-          <input type="text" id="dictConverted" value={punjabiWord} onChange={handlePunjabiTextChange} autoComplete="off" required></input>
+          <input
+            type="text"
+            id="dictConverted"
+            value={punjabiWord}
+            onChange={handlePunjabiTextChange}
+            autoComplete="off"
+            required
+          ></input>
           <button type="submit">Send to DB</button>
         </form>
       </div>
       <p>Dictionary size: {allWords.length} words</p>
-      <label htmlFor='filter'>Filter Dictionary</label>
-      <input id='filter' value={filterWord} onChange={handleFilter}/>
-      <p>Filtered words: {filterWord.length === 0 ? 0 : displayFilter.length} words</p>
-      {filterWord !== "" &&<ul>
-        {displayFilter.map(word =>
-          <li key={word._id}>
-            <Link to={`/dictionary/${word._id}`}>{word.phonetic}</Link>
-          </li>
-        )}
-      </ul>}
+      <label htmlFor="filter">Filter Dictionary</label>
+      <input id="filter" value={filterWord} onChange={handleFilter} />
+      <p>
+        Filtered words: {filterWord.length === 0 ? 0 : displayFilter.length}{" "}
+        words
+      </p>
+      {filterWord !== "" && (
+        <ul>
+          {displayFilter.map((word) => (
+            <li key={word._id}>
+              <Link to={`/dictionary/${word._id}`}>{word.phonetic}</Link>
+            </li>
+          ))}
+        </ul>
+      )}
     </>
-  )
-}
+  );
+};
 
-const Word = ({getOneWord, dictWord, dictWordConverted, deleteWord}) => {
-  const match = useMatch('/dictionary/:id')
+const Word = ({ getOneWord, dictWord, dictWordConverted, deleteWord }) => {
+  const match = useMatch("/dictionary/:id");
   useEffect(() => {
-    getOneWord(match.params.id)
-  }, [])
-  return(
+    getOneWord(match.params.id);
+  }, []);
+  return (
     <>
       <h1>{dictWord.phonetic}</h1>
       <ul>
-        {dictWordConverted.map((word, index) => 
+        {dictWordConverted.map((word, index) => (
           <li key={index}>{word}</li>
-        )} 
+        ))}
       </ul>
-      <Link to={`/dictionary`}><button onClick={() => deleteWord(match.params.id)}>Delete</button></Link>
+      <Link to={`/dictionary`}>
+        <button onClick={() => deleteWord(match.params.id)}>Delete</button>
+      </Link>
     </>
-  )
-}
+  );
+};
 
 function App() {
-  const [text, setText] = useState("") // phonetic punjabi string
+  const [text, setText] = useState(""); // phonetic punjabi string
   // const [finalText, setFinalText] = useState("") // complete converted string
-  const [splitFinal, setSplitFinal] = useState([]) // converted strings in array
-  const [dropdownList, setDropdownList] = useState([]) // list of all dropdown arrays in an array
-  const [selectedConverted, setSelectedConverted] = useState("") // clicked converted word
-  const [selectedDropdown, setSelectedDropdown] = useState([]) // selected dropdown menu
-  const [dropdownWord, setDropdownWord] = useState("") // clicked dropdown word
-  const [convertedIndex, setConvertedIndex] = useState() // retains position of clicked word
-  const [dropdownVisible, setDropdownVisible] = useState(false) // toggles dropdown div
+  const [splitFinal, setSplitFinal] = useState([]); // converted strings in array
+  const [dropdownList, setDropdownList] = useState([]); // list of all dropdown arrays in an array
+  const [selectedConverted, setSelectedConverted] = useState(""); // clicked converted word
+  const [selectedDropdown, setSelectedDropdown] = useState([]); // selected dropdown menu
+  const [dropdownWord, setDropdownWord] = useState(""); // clicked dropdown word
+  const [convertedIndex, setConvertedIndex] = useState(); // retains position of clicked word
+  const [dropdownVisible, setDropdownVisible] = useState(false); // toggles dropdown div
   const divRef = useRef(null); // required for detecting clicks outside dropdown div
   // below are states used in the 'dictionary' portion of the site
-  const [allWords, setAllWords] = useState([])
-  const [dictText, setDictText] = useState("")
-  const [punjabiWord, setPunjabiWord] = useState("")
-  const [dictWord, setDictWord] = useState({})
-  const [dictWordConverted, setDictWordConverted] = useState([])
-  const [filterWord, setFilterWord] = useState("")
+  const [allWords, setAllWords] = useState([]);
+  const [dictText, setDictText] = useState("");
+  const [punjabiWord, setPunjabiWord] = useState("");
+  const [dictWord, setDictWord] = useState({});
+  const [dictWordConverted, setDictWordConverted] = useState([]);
+  const [filterWord, setFilterWord] = useState("");
 
   // renderes final converted text
-  useEffect(() => {
-  }, [splitFinal])
+  useEffect(() => {}, [splitFinal]);
 
   const addText = (event) => {
     event.preventDefault();
-    const phoneticTextarea = {payload: text}
+    const phoneticTextarea = { payload: text };
     wordService
       .convert(phoneticTextarea)
-      .then(response => {
-        console.log(response)
-        setSplitFinal(response.splitFinal)
+      .then((response) => {
+        console.log(response);
+        setSplitFinal(response.splitFinal);
         // setFinalText(response.converted)
-        setDropdownList(response.dropdowns)
+        setDropdownList(response.dropdowns);
       })
-      .catch(error => console.log(error))
-  }
+      .catch((error) => console.log(error));
+  };
 
   const handleTextChange = (event) => {
-    console.log(event.target.value)
-    setText(event.target.value)
-  }
+    console.log(event.target.value);
+    setText(event.target.value);
+  };
 
   // selected dropdown menu is properly rendered as state variable
   useEffect(() => {
-    console.log("selected dropdown: ", selectedDropdown)
-  }, [selectedDropdown])
+    console.log("selected dropdown: ", selectedDropdown);
+  }, [selectedDropdown]);
 
   // selected dropdown menu is properly rendered as state variable
   useEffect(() => {
-    console.log("index in list of dropdowns: ", convertedIndex)
-  }, [convertedIndex])
-  
+    console.log("index in list of dropdowns: ", convertedIndex);
+  }, [convertedIndex]);
+
   // returns proper dropdown menu from clicked word
   const getDropdownMenuAndIndex = (index) => {
-    setSelectedDropdown(dropdownList[index])
-    setConvertedIndex(index)
-    return dropdownList[index]
-  }
+    setSelectedDropdown(dropdownList[index]);
+    setConvertedIndex(index);
+    return dropdownList[index];
+  };
 
   // uses clicked word to find the relevant dropdown menu
   const getTextareaWordAndDropdown = (selectionStart) => {
-    let sum = 0
+    let sum = 0;
     for (let i = 0; i < splitFinal.length; i++) {
-      sum += splitFinal[i].length + 1
+      sum += splitFinal[i].length + 1;
       if (sum > selectionStart) {
-        getDropdownMenuAndIndex(i)
-        return splitFinal[i]
+        getDropdownMenuAndIndex(i);
+        // checks if clicked word has punctuation mark
+        for (let y = 0; y < splitFinal[i].length; y++) {
+          if (
+            "!@#$%^&*()-_=+[{]};:'\",<.>/?\\|".indexOf(splitFinal[i][y]) !== -1
+          ) {
+            console.log("String has a special character!");
+          }
+        }
+        return splitFinal[i];
       }
     }
-  }
+  };
 
   // selected converted word is properly rendered as state variable
   useEffect(() => {
-    console.log("textarea converted word:", selectedConverted)
-  }, [selectedConverted])
+    console.log("textarea converted word:", selectedConverted);
+  }, [selectedConverted]);
 
   // identifies clicked word from textarea
   const handleTextClick = (event) => {
-    let i = event.target.selectionStart
+    let i = event.target.selectionStart;
     // console.log(i)
     // stops dropdown menu from showing if clicking past last word
     if (i !== splitFinal.join(" ").length) {
       // console.log("textarea word:", getTextareaWordAndDropdown(i, finalText))
-      setSelectedConverted(getTextareaWordAndDropdown(i))
-      setDropdownVisible(true)
+      setSelectedConverted(getTextareaWordAndDropdown(i));
+      setDropdownVisible(true);
     }
-  }
+  };
 
   // used for making dropdown disappear
   const handleClickOutside = (event) => {
@@ -175,149 +264,262 @@ function App() {
 
   // required for making dropdown disappear when clicking outside of it
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
   // renders list of dropdowns
-  useEffect(() => {
-  }, [dropdownList])
+  useEffect(() => {}, [dropdownList]);
 
   const swapWordFromDropdown = (index, dropdownWord) => {
-    let copySplitFinal = [...splitFinal]
-    let copyAllDropdowns = [...dropdownList]
-    let copyDropdownMenu = [...selectedDropdown]
-    let dropdownPosition = copyDropdownMenu.indexOf(dropdownWord)
-    
-    // replaces word in converted textarea w/ dropdown word
-    console.log(index, dropdownWord)
-    copySplitFinal[index] = dropdownWord
-    console.log("copySplitFinal: ", copySplitFinal)
-    
-    // replaces selected dropdown word with original converted word
-    copyDropdownMenu[dropdownPosition] = selectedConverted
-    console.log("copyDropdownMenu: ", copyDropdownMenu)
+    let specialRegex = "~!@#$%^&*()-_=+[{]};:'\",<.>/?\\|";
+    let copySplitFinal = [...splitFinal];
+    let copyAllDropdowns = [...dropdownList];
+    let copyDropdownMenu = [...selectedDropdown];
+    let dropdownPosition = copyDropdownMenu.indexOf(dropdownWord);
+
+    // checks if clicked word has punctuation mark
+    let puncExists = false;
+    for (let i = 0; i < selectedConverted.length; i++) {
+      if (specialRegex.indexOf(selectedConverted[i]) !== -1) {
+        console.log("String has a special character!");
+        puncExists = true;
+        break;
+      }
+    }
+
+    if (puncExists) {
+      // converts clicked word into char array and used for splice (will only have punctuation)
+      let copySelected = Array.from(selectedConverted.split(""));
+      console.log("copy selected:", copySelected);
+      // collects non-special characters to form string
+      let onlyString = [];
+      let firstOccurrence = null;
+      for (let i = 0; i < selectedConverted.split("").length; i++) {
+        if (!specialRegex.includes(selectedConverted.split("")[i])) {
+          if (firstOccurrence == null) {
+            firstOccurrence = i;
+          }
+          console.log(
+            "copy selected index value:",
+            selectedConverted.split("")[i]
+          );
+          console.log("index:", i);
+          onlyString.push(
+            copySelected.splice(
+              copySelected.indexOf(selectedConverted.split("")[i]),
+              1
+            )
+          );
+        }
+      }
+
+      // replaces word in converted textarea w/ dropdown word
+      console.log(index, dropdownWord);
+      copySelected.splice(firstOccurrence, 0, dropdownWord);
+      copySplitFinal[index] = copySelected.join("");
+      console.log("copySplitFinal: ", copySplitFinal);
+
+      // replaces selected dropdown word with original converted word minus punctuation
+      copyDropdownMenu.splice(dropdownPosition, 1);
+      copyDropdownMenu.splice(0, 0, onlyString.join(""));
+      console.log("copyDropdownMenu: ", copyDropdownMenu);
+
+      // console.log("only string:", onlyString.join(""));
+      // console.log("copy selected", copySelected.join(""));
+      // console.log("first occurence of non-special char:", firstOccurrence);
+      // let convertedSplice = copySelected.splice(0, puncIndex);
+      // console.log("remaining punctuation:", copySelected);
+      // console.log("convertedSplice:", convertedSplice.join(""));
+    } else {
+      // replaces word in converted textarea w/ dropdown word
+      console.log(index, dropdownWord);
+      copySplitFinal[index] = dropdownWord;
+      console.log("copySplitFinal: ", copySplitFinal);
+
+      // replaces selected dropdown word with original converted word
+      copyDropdownMenu.splice(dropdownPosition, 1);
+      copyDropdownMenu.splice(0, 0, selectedConverted);
+      // copyDropdownMenu[dropdownPosition] = selectedConverted;
+      console.log("copyDropdownMenu: ", copyDropdownMenu);
+    }
 
     // updates list of dropdowns to reflect change in selected dropdown
-    copyAllDropdowns[convertedIndex] = copyDropdownMenu
-    console.log("copyAllDropdowns: ", copyAllDropdowns)
+    copyAllDropdowns[convertedIndex] = copyDropdownMenu;
+    console.log("copyAllDropdowns: ", copyAllDropdowns);
+    setSplitFinal(copySplitFinal);
+    setDropdownList(copyAllDropdowns);
+  };
 
-    setSplitFinal(copySplitFinal)
-    setDropdownList(copyAllDropdowns)
-  }
-
-// selected dropdown word is properly rendered as state variable
+  // selected dropdown word is properly rendered as state variable
   useEffect(() => {
-    console.log("selected dropdown word:", dropdownWord)
-    swapWordFromDropdown(convertedIndex, dropdownWord)
-  }, [dropdownWord])
+    console.log("selected dropdown word:", dropdownWord);
+    swapWordFromDropdown(convertedIndex, dropdownWord);
+  }, [dropdownWord]);
 
   // extracts value from dropdown menu
   const handleDropDownClick = (event) => {
     // console.log("dropdown: value", event.target.textContent)
-    setDropdownWord(event.target.textContent)
+    setDropdownWord(event.target.textContent);
     // console.log("dropdown value:", dropdownWord)
-    setDropdownVisible(false)
-  }
+    setDropdownVisible(false);
+  };
 
   const handleDictTextChange = (event) => {
-    console.log(event.target.value)
-    setDictText(event.target.value)
-  }
+    console.log(event.target.value);
+    setDictText(event.target.value);
+  };
 
   const handlePunjabiTextChange = (event) => {
-    console.log(event.target.value)
-    setPunjabiWord(event.target.value)
-  }
+    console.log(event.target.value);
+    setPunjabiWord(event.target.value);
+  };
 
   const setDictionary = () => {
     wordService
-    .getDictionary()
-    .then(response => {
-      setAllWords(response)
-      console.log(response)
-    })
-    .catch(error => console.log(error))
-  }
+      .getDictionary()
+      .then((response) => {
+        setAllWords(response);
+        console.log(response);
+      })
+      .catch((error) => console.log(error));
+  };
 
   const getOneWord = async (id) => {
-    console.log("id:", id)
+    console.log("id:", id);
     await wordService
-    .getDictionaryWord(id)
-    .then(response => {
-      setDictWord(response)
-      setDictWordConverted(response.converted)
-      console.log("response 1 word:", response)
-    })
-    .catch(error => console.log(error))
-  }
-  
+      .getDictionaryWord(id)
+      .then((response) => {
+        setDictWord(response);
+        setDictWordConverted(response.converted);
+        console.log("response 1 word:", response);
+      })
+      .catch((error) => console.log(error));
+  };
+
   const handleFilter = (event) => {
-   console.log(event.target.value)
-   setFilterWord(event.target.value)
-  }
+    console.log(event.target.value);
+    setFilterWord(event.target.value);
+  };
 
   const filterList = (words, criteria) => {
-    const filtered = words.filter(word => word.phonetic.toLowerCase().startsWith(criteria.toLowerCase()));
+    const filtered = words.filter((word) =>
+      word.phonetic.toLowerCase().startsWith(criteria.toLowerCase())
+    );
     return filtered;
-  }
-  let displayFilter = filterList(allWords, filterWord)
+  };
+  let displayFilter = filterList(allWords, filterWord);
 
   const deleteWord = async (id) => {
-    console.log("id:", id)
+    console.log("id:", id);
     await wordService
-    .deleteDicWord(id)
-    .then(response => {
-      console.log("deleted word:", response)
-    })
-    .catch(error => console.log(error))
-  }
+      .deleteDicWord(id)
+      .then((response) => {
+        console.log("deleted word:", response);
+      })
+      .catch((error) => console.log(error));
+  };
 
   const addToDictionary = (event) => {
     event.preventDefault();
-    setDictText("")
-    setPunjabiWord("")
+    setDictText("");
+    setPunjabiWord("");
 
     const toBeAdded = {
       phonetic: event.target[0].value,
       converted: event.target[1].value,
-    }
+    };
     wordService
       .addToDict(toBeAdded)
-      .then(response => {
-        console.log(response)
+      .then((response) => {
+        console.log(response);
         // setDictText(response.converted)
       })
-      .catch(error => console.log(error))
-  }
+      .catch((error) => console.log(error));
+  };
 
   return (
     <Router>
       <nav className="navbar navbar-expand navbar-dark bg-dark">
         {/* <a className="navbar-brand" href="/">Viakaran</a> */}
-        <Link className="navbar-brand" to='/'>Viakaran</Link>
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <Link className="navbar-brand" to="/">
+          Viakaran
+        </Link>
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div className="navbar-nav">
-            <a className="nav-item nav-link" href="/help">Help<span className="sr-only"></span></a>
+            <a className="nav-item nav-link" href="/help">
+              Help<span className="sr-only"></span>
+            </a>
           </div>
           <div className="navbar-nav ms-auto">
             {/* <a className="nav-item nav-link" href="/bob">Admin<span className="sr-only"></span></a> */}
-            <Link className="nav-item nav-link" to='/dictionary'>Dictionary</Link>
+            <Link className="nav-item nav-link" to="/dictionary">
+              Dictionary
+            </Link>
           </div>
         </div>
       </nav>
       <Routes>
-        <Route path="/" element={<Home addText={addText} text={text} finalText={splitFinal.join(" ")} handleTextChange={handleTextChange} handleTextClick={handleTextClick} selectedDropdown={selectedDropdown} handleDropDownClick={handleDropDownClick} visible={dropdownVisible} divRef={divRef}/>} />
-        <Route path="/dictionary" element={<Dictionary setDictionary={setDictionary} addToDictionary={addToDictionary} allWords={allWords} dictText={dictText} handleDictTextChange={handleDictTextChange} handlePunjabiTextChange={handlePunjabiTextChange} punjabiWord={punjabiWord} filterWord={filterWord} handleFilter={handleFilter} displayFilter={displayFilter}/>} />
-        <Route path="/dictionary/:id" element={<Word getOneWord={getOneWord} dictWord={dictWord} dictWordConverted={dictWordConverted} deleteWord={deleteWord}/>}/>
+        <Route
+          path="/"
+          element={
+            <Home
+              addText={addText}
+              text={text}
+              finalText={splitFinal.join(" ")}
+              handleTextChange={handleTextChange}
+              handleTextClick={handleTextClick}
+              selectedDropdown={selectedDropdown}
+              handleDropDownClick={handleDropDownClick}
+              visible={dropdownVisible}
+              divRef={divRef}
+            />
+          }
+        />
+        <Route
+          path="/dictionary"
+          element={
+            <Dictionary
+              setDictionary={setDictionary}
+              addToDictionary={addToDictionary}
+              allWords={allWords}
+              dictText={dictText}
+              handleDictTextChange={handleDictTextChange}
+              handlePunjabiTextChange={handlePunjabiTextChange}
+              punjabiWord={punjabiWord}
+              filterWord={filterWord}
+              handleFilter={handleFilter}
+              displayFilter={displayFilter}
+            />
+          }
+        />
+        <Route
+          path="/dictionary/:id"
+          element={
+            <Word
+              getOneWord={getOneWord}
+              dictWord={dictWord}
+              dictWordConverted={dictWordConverted}
+              deleteWord={deleteWord}
+            />
+          }
+        />
       </Routes>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;
