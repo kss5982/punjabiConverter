@@ -53,6 +53,13 @@ const Home = ({
           autoComplete="off"
           readOnly
         ></textarea>
+        <button
+          id="copy"
+          type="button"
+          onClick={() => navigator.clipboard.writeText(finalText)}
+        >
+          Copy Panjabi/ਪੰਜਾਬੀ ਕਾਪੀ ਕਰੋ
+        </button>
         <div
           ref={divRef}
           style={{ width: "fit-content" }}
@@ -70,7 +77,6 @@ const Home = ({
             ))}
         </div>
       </div>
-      {/* <button id="copy">Copy Panjabi/ਪੰਜਾਬੀ ਕਾਪੀ ਕਰੋ</button> */}
     </div>
   );
 };

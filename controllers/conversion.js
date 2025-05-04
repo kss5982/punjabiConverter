@@ -38,7 +38,7 @@ convertRouter.post("/", async (req, res) => {
   const options = {
     shouldSort: true,
     keys: ["phonetic"],
-    threshold: 0.3,
+    threshold: 0.4,
   };
   const fuse = new Fuse(convertedArrayObj.flat(1), options);
   // console.log(fuse);
