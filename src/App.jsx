@@ -280,7 +280,7 @@ function App() {
   useEffect(() => {}, [dropdownList]);
 
   const swapWordFromDropdown = (index, dropdownWord) => {
-    let specialRegex = "~!@#$%^&*()-_=+[{]};:'\",<.>/?\\|";
+    let specialRegex = "\n~!@#$%^&*()-_=+[{]};:'\",<.>/?\\|";
     let copySplitFinal = [...splitFinal];
     let copyAllDropdowns = [...dropdownList];
     let copyDropdownMenu = [...selectedDropdown];

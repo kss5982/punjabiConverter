@@ -3,19 +3,18 @@ import "express-async-errors";
 import Word from "../models/dictionaryWord.js";
 import Fuse from "fuse.js";
 import punctuation from "../utils/puntuation.js";
-import { emojiPattern, compactEmojiPattern } from "regex-combined-emojis";
 
 const convertRouter = express.Router();
 
 convertRouter.post("/", async (req, res) => {
-  // console.log("in convertRouter", request.body);
+  console.log("in convertRouter", req.body);
   // converts payload into array of lowercase strings w/out spaces
   const phoneticTextArr = await req.body.payload
     .trim()
     .split(/( |\n|[_]|\b)/)
     .filter((word) => word !== "" && word !== " ");
 
-  // console.log(phoneticTextArr);
+  console.log(phoneticTextArr);
   let copyOfPhoneticArray = phoneticTextArr.slice();
   let convertedArrayObj = [];
   let fuzzySearch = [];
@@ -104,11 +103,12 @@ convertRouter.post("/", async (req, res) => {
       else {
         // console.log(phoneticWord);
         // add unidentified word to dropdowns if its actually an alphanumeric value (not punctuation/symbols)
-        if (/^[a-zA-Z0-9]+$/.test(phoneticWord)) {
-          finalDropDownMenu.push([phoneticWord]);
-        } else if (new RegExp(emojiPattern, "g").test(phoneticWord)) {
-          finalDropDownMenu.push([phoneticWord]);
-        }
+        // if (/^[a-zA-Z0-9]+$/.test(phoneticWord)) {
+        //   finalDropDownMenu.push([phoneticWord]);
+        // } else if (new RegExp(emojiPattern, "g").test(phoneticWord)) {
+        //   finalDropDownMenu.push([phoneticWord]);
+        // }
+        finalDropDownMenu.push([phoneticWord]);
         finalArray.push(phoneticWord);
       }
       // console.log(finalArray);
@@ -116,8 +116,8 @@ convertRouter.post("/", async (req, res) => {
     } else finalArray.push(phoneticWord);
     // console.log(fuseWord);
   }
-  // console.log("converted array: ", finalArray);
-  // console.log(finalDropDownMenu);
+  console.log("converted array: ", finalArray);
+  console.log(finalDropDownMenu);
   let finalText = finalArray.join(" ");
   // console.log("before regex", finalText);
   finalText = finalText
