@@ -6,6 +6,10 @@ textarea {
     resize: none;
 }
 
+/* .covertedText:hover{
+    cursor: pointer;
+} */
+
 /* 
 textarea {
     height: 50vh;
@@ -17,8 +21,13 @@ textarea {
 
 */
 
-
+.dropdownItem:hover {
+    background: yellow;
+    cursor: pointer;
+}
 .dropdownItem {
+    padding: 2px;
     outline: 1px solid black;
     text-align: center;
+    transition: background-color 0.5s;
 }

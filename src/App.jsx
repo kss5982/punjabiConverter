@@ -44,6 +44,7 @@ const Home = ({
       <div className="col-md-6">
         <h5>Converted (Click words!)</h5>
         <textarea
+          className="convertedText"
           value={finalText}
           onClick={handleTextClick}
           cols="30"
