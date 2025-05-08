@@ -7,14 +7,14 @@ import punctuation from "../utils/puntuation.js";
 const convertRouter = express.Router();
 
 convertRouter.post("/", async (req, res) => {
-  console.log("in convertRouter", req.body);
+  // console.log("in convertRouter", req.body);
   // converts payload into array of lowercase strings w/out spaces
   const phoneticTextArr = await req.body.payload
     .trim()
     .split(/( |\n|[_]|\b)/)
     .filter((word) => word !== "" && word !== " ");
 
-  console.log(phoneticTextArr);
+  // console.log(phoneticTextArr);
   let copyOfPhoneticArray = phoneticTextArr.slice();
   let convertedArrayObj = [];
   let fuzzySearch = [];
@@ -57,13 +57,13 @@ convertRouter.post("/", async (req, res) => {
     // creates an array with the best fuzzy match converted values + phonetic word
     let dropDownValues = [];
     if (exactExists && !punctuation.includes(phoneticWord)) {
-      console.log(`exact match! ${phoneticWord} exists in dictionary`);
+      // console.log(`exact match! ${phoneticWord} exists in dictionary`);
       finalArray.push(initialSearch.converted[0]);
       // checks if converted word has more than 1 possible value
       if (initialSearch.converted.length > 1) {
         // if it does, then add 2nd possible value and onwards into dropdown menu (don't need first)
         dropDownValues = Array.from(initialSearch.converted.slice(1));
-        console.log(dropDownValues);
+        // console.log(dropDownValues);
       }
       dropDownValues.push(phoneticWord);
       // console.log(dropDownValues);
@@ -85,7 +85,7 @@ convertRouter.post("/", async (req, res) => {
         if (fuseWord[0].item.converted.length > 1) {
           // if it does, then add 2nd possible value and onwards into dropdown menu (don't need first)
           dropDownValues = Array.from(fuseWord[0].item.converted.slice(1));
-          console.log(dropDownValues);
+          // console.log(dropDownValues);
         }
         // add additional non-duplicate dropdown suggestions
         if (
@@ -93,7 +93,7 @@ convertRouter.post("/", async (req, res) => {
           !fuseWord[1].item.converted.includes(fuseWord[0].item.converted[0])
         ) {
           dropDownValues.push(...fuseWord[1].item.converted);
-          console.log("dropdown values", dropDownValues);
+          // console.log("dropdown values", dropDownValues);
         }
         dropDownValues.push(phoneticWord);
         // console.log(dropDownValues);
@@ -108,7 +108,7 @@ convertRouter.post("/", async (req, res) => {
         // } else if (new RegExp(emojiPattern, "g").test(phoneticWord)) {
         //   finalDropDownMenu.push([phoneticWord]);
         // }
-        finalDropDownMenu.push([phoneticWord]);
+        finalDropDownMenu.push(["NA"]);
         finalArray.push(phoneticWord);
       }
       // console.log(finalArray);
@@ -116,8 +116,8 @@ convertRouter.post("/", async (req, res) => {
     } else finalArray.push(phoneticWord);
     // console.log(fuseWord);
   }
-  console.log("converted array: ", finalArray);
-  console.log(finalDropDownMenu);
+  // console.log("converted array: ", finalArray);
+  // console.log(finalDropDownMenu);
   let finalText = finalArray.join(" ");
   // console.log("before regex", finalText);
   finalText = finalText
