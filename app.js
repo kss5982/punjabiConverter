@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import convertRouter from "./controllers/conversion.js";
 import dictionRouter from "./controllers/dictionary.js";
 import path from "path";
+import helmet from "helmet";
 import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 
@@ -23,6 +24,7 @@ mongoose
   });
 
 const app = express();
+app.use(helmet());
 app.use(cors());
 app.use(morgan("tiny"));
 app.use(express.static("dist"));

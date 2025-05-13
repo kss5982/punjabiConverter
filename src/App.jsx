@@ -64,7 +64,7 @@ const Home = ({
         <div
           ref={divRef}
           style={{ width: "fit-content" }}
-          id="dropdownContainer"
+          className="dropdownContainer"
         >
           {visible &&
             selectedDropdown.map((dropDownItem, i) => (
@@ -84,6 +84,7 @@ const Home = ({
 
 const Dictionary = ({
   setDictionary,
+  handleDictionaryLoad,
   allWords,
   addToDictionary,
   handleDictTextChange,
@@ -95,9 +96,9 @@ const Dictionary = ({
   displayFilter,
 }) => {
   //maybe useEffect to grab dictionary on click?
-  useEffect(() => {
-    setDictionary();
-  }, []);
+  // useEffect(() => {
+  //   setDictionary();
+  // }, []);
 
   return (
     <>
@@ -127,6 +128,7 @@ const Dictionary = ({
           <button type="submit">Send to DB</button>
         </form>
       </div>
+      <button onClick={handleDictionaryLoad}>Load Dictionary</button>
       <p>Dictionary size: {allWords.length} words</p>
       <label htmlFor="filter">Filter Dictionary</label>
       <input id="filter" value={filterWord} onChange={handleFilter} />
@@ -384,6 +386,10 @@ function App() {
     setPunjabiWord(event.target.value);
   };
 
+  const handleDictionaryLoad = () => {
+    setDictionary();
+  };
+
   const setDictionary = () => {
     wordService
       .getDictionary()
@@ -501,6 +507,7 @@ function App() {
           element={
             <Dictionary
               setDictionary={setDictionary}
+              handleDictionaryLoad={handleDictionaryLoad}
               addToDictionary={addToDictionary}
               allWords={allWords}
               dictText={dictText}
