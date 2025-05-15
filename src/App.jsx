@@ -67,6 +67,7 @@ const Home = ({
           className="dropdownContainer"
         >
           {visible &&
+            selectedDropdown &&
             selectedDropdown.map((dropDownItem, i) => (
               <div
                 className="dropdownItem"

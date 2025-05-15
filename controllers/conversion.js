@@ -11,6 +11,7 @@ convertRouter.post("/", async (req, res) => {
   // converts payload into array of lowercase strings w/out spaces
   const phoneticTextArr = await req.body.payload
     .trim()
+    .toLowerCase()
     .split(/( |\n|[_]|\b)/)
     .filter((word) => word !== "" && word !== " ");
 
@@ -45,6 +46,7 @@ convertRouter.post("/", async (req, res) => {
   // finalArray will be used in REGEX (first value of dropdown)
   let finalArray = [];
   let finalDropDownMenu = [];
+  let exceptions = ["i", "ii", "l", "ll", "|", "||"];
   for (const phoneticWord of phoneticTextArr) {
     let exactExists;
     let initialSearch = convertedArrayObj
@@ -56,7 +58,10 @@ convertRouter.post("/", async (req, res) => {
     }
     // creates an array with the best fuzzy match converted values + phonetic word
     let dropDownValues = [];
-    if (exactExists && !punctuation.includes(phoneticWord)) {
+    if (exactExists && exceptions.includes(phoneticWord)) {
+      console.log("exceptional word!", phoneticWord);
+      finalArray.push(initialSearch.converted[0]);
+    } else if (exactExists && !punctuation.includes(phoneticWord)) {
       // console.log(`exact match! ${phoneticWord} exists in dictionary`);
       finalArray.push(initialSearch.converted[0]);
       // checks if converted word has more than 1 possible value
@@ -101,13 +106,6 @@ convertRouter.post("/", async (req, res) => {
       }
       // if 2nd fuzzy search has nothing, then append phonetic value
       else {
-        // console.log(phoneticWord);
-        // add unidentified word to dropdowns if its actually an alphanumeric value (not punctuation/symbols)
-        // if (/^[a-zA-Z0-9]+$/.test(phoneticWord)) {
-        //   finalDropDownMenu.push([phoneticWord]);
-        // } else if (new RegExp(emojiPattern, "g").test(phoneticWord)) {
-        //   finalDropDownMenu.push([phoneticWord]);
-        // }
         finalDropDownMenu.push(["NA"]);
         finalArray.push(phoneticWord);
       }
@@ -121,7 +119,7 @@ convertRouter.post("/", async (req, res) => {
   let finalText = finalArray.join(" ");
   // console.log("before regex", finalText);
   finalText = finalText
-    .replace(/\s(?=!|\?|\.|:|,|\)|\]|\}|@|%|\^|\*|\+|_|~|\/|\\|\|)/g, "") // removes space before character
+    .replace(/\s(?=!|\?|\.|:|,|\)|\]|\}|@|%|\^|\*|\+|_|~|।|॥|\/|\\|\|)/g, "") // removes space before character
     .replace(/(?<=\(|\{|\[|#|\$|'|`|_|\n)\s/g, "") // removes space after character
     .replace(/" *([^"]*?) *"/g, '"$1"'); // removes spaces between quotes
 
