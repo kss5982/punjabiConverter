@@ -5,6 +5,8 @@ import morgan from "morgan";
 import mongoose from "mongoose";
 import convertRouter from "./controllers/conversion.js";
 import dictionRouter from "./controllers/dictionary.js";
+import usersRouter from "./controllers/users.js";
+import loginRouter from "./controllers/login.js";
 import path from "path";
 import helmet from "helmet";
 import { fileURLToPath } from "url";
@@ -33,24 +35,12 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/api", convertRouter);
 app.use("/api/dictionary", dictionRouter);
+app.use("/api/users", usersRouter);
+app.use("/api/login", loginRouter);
 
 //lets server render React code on refresh
 app.get("/*", function (req, res) {
   res.sendFile(path.join(__dirname, "dist/index.html"));
 });
-
-// app.get("/", (request, response) => {
-//   response.send("<h1>Hello World!</h1>");
-// });
-
-// app.post("/", (request, response) => {
-//   try {
-//     response.send(request.body);
-//   } catch (err) {
-//     console.log(err);
-//   }
-
-//   // return await request.body.config.data;
-// });
 
 export default app;

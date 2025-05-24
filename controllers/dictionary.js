@@ -66,7 +66,7 @@ dictionRouter.post("/", async (req, res) => {
     }
   }
   // // prevents page from refreshing after stuff is sent to database!
-  // res.status(204).send();
+  res.status(204).send();
 });
 
 export default dictionRouter;

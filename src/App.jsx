@@ -503,6 +503,7 @@ function App() {
             />
           }
         />
+
         <Route
           path="/dictionary"
           element={
@@ -521,6 +522,7 @@ function App() {
             />
           }
         />
+
         <Route
           path="/dictionary/:id"
           element={
