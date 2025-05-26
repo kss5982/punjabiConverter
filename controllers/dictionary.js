@@ -1,10 +1,30 @@
 import express, { json } from "express";
 import "express-async-errors";
 import Word from "../models/dictionaryWord.js";
+import User from "../models/user.js";
+import jwt from "jsonwebtoken";
 
 const dictionRouter = express.Router();
 
+const getTokenFrom = (request) => {
+  const authorization = request.get("authorization");
+  if (authorization && authorization.startsWith("Bearer ")) {
+    return authorization.replace("Bearer ", "");
+  }
+  return null;
+};
+
 dictionRouter.get("/", async (req, res) => {
+  // checks if JWT exists first
+  const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET);
+  if (!decodedToken.id) {
+    return res.status(401).json({ error: "token invalid" });
+  }
+  const user = await User.findById(decodedToken.id);
+  if (!user) {
+    return res.status(400).json({ error: "UserId missing or not valid" });
+  }
+
   let allWords = await Word.find({});
   Array.prototype.sortBy = function (p) {
     return this.slice(0).sort(function (a, b) {
@@ -16,6 +36,16 @@ dictionRouter.get("/", async (req, res) => {
 });
 
 dictionRouter.get("/:id", async (req, res) => {
+  // checks if JWT exists first
+  const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET);
+  if (!decodedToken.id) {
+    return res.status(401).json({ error: "token invalid" });
+  }
+  const user = await User.findById(decodedToken.id);
+  if (!user) {
+    return res.status(400).json({ error: "UserId missing or not valid" });
+  }
+
   const { id } = req.params;
   console.log("id in router: ", id);
   const word = await Word.findById(id);
@@ -24,12 +54,32 @@ dictionRouter.get("/:id", async (req, res) => {
 });
 
 dictionRouter.delete("/:id", async (req, res) => {
+  // checks if JWT exists first
+  const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET);
+  if (!decodedToken.id) {
+    return res.status(401).json({ error: "token invalid" });
+  }
+  const user = await User.findById(decodedToken.id);
+  if (!user) {
+    return res.status(400).json({ error: "UserId missing or not valid" });
+  }
+
   const { id } = req.params;
   await Word.findByIdAndDelete(id);
   res.status(200);
 });
 
 dictionRouter.post("/", async (req, res) => {
+  // checks if JWT exists first
+  const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET);
+  if (!decodedToken.id) {
+    return res.status(401).json({ error: "token invalid" });
+  }
+  const user = await User.findById(decodedToken.id);
+  if (!user) {
+    return res.status(400).json({ error: "UserId missing or not valid" });
+  }
+
   console.log("request body:", req.body);
   let english = await req.body.phonetic.trim().toLowerCase().split(" ");
   console.log("english word(s):", english);

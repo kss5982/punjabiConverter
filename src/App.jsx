@@ -95,6 +95,13 @@ const Dictionary = ({
   filterWord,
   handleFilter,
   displayFilter,
+  handleLogin,
+  handleLogout,
+  handleUserChange,
+  handlePassChange,
+  username,
+  password,
+  user,
 }) => {
   //maybe useEffect to grab dictionary on click?
   // useEffect(() => {
@@ -103,48 +110,77 @@ const Dictionary = ({
 
   return (
     <>
-      <div className="row">
-        <form onSubmit={addToDictionary}>
-          <label htmlFor="dictPhone">Phonetic Word(s)</label>
-          <textarea
-            value={dictText}
-            onChange={handleDictTextChange}
-            id="dictPhone"
-            cols="30"
-            rows="8"
-            spellCheck="false"
-            placeholder="add space-separated phonetic words here"
-            autoComplete="off"
-            autoFocus
-          ></textarea>
-          <label htmlFor="dictConverted">Punjabi Word</label>
-          <input
-            type="text"
-            id="dictConverted"
-            value={punjabiWord}
-            onChange={handlePunjabiTextChange}
-            autoComplete="off"
-            required
-          ></input>
-          <button type="submit">Send to DB</button>
+      {user === null && (
+        <form onSubmit={handleLogin}>
+          <div>
+            username
+            <input
+              type="text"
+              value={username}
+              name="Username"
+              onChange={handleUserChange}
+            />
+          </div>
+          <div>
+            password
+            <input
+              type="password"
+              value={password}
+              name="Password"
+              onChange={handlePassChange}
+            />
+          </div>
+          <button type="submit">login</button>
         </form>
-      </div>
-      <button onClick={handleDictionaryLoad}>Load Dictionary</button>
-      <p>Dictionary size: {allWords.length} words</p>
-      <label htmlFor="filter">Filter Dictionary</label>
-      <input id="filter" value={filterWord} onChange={handleFilter} />
-      <p>
-        Filtered words: {filterWord.length === 0 ? 0 : displayFilter.length}{" "}
-        words
-      </p>
-      {filterWord !== "" && (
-        <ul>
-          {displayFilter.map((word) => (
-            <li key={word._id}>
-              <Link to={`/dictionary/${word._id}`}>{word.phonetic}</Link>
-            </li>
-          ))}
-        </ul>
+      )}
+      {user !== null && (
+        <div className="container">
+          <button onClick={handleLogout}>Logout</button>
+          <div className="row">
+            <form onSubmit={addToDictionary}>
+              <label htmlFor="dictPhone">Phonetic Word(s)</label>
+              <textarea
+                value={dictText}
+                onChange={handleDictTextChange}
+                id="dictPhone"
+                cols="30"
+                rows="8"
+                spellCheck="false"
+                placeholder="add space-separated phonetic words here"
+                autoComplete="off"
+                autoFocus
+              ></textarea>
+              <label htmlFor="dictConverted">Punjabi Word</label>
+              <input
+                type="text"
+                id="dictConverted"
+                value={punjabiWord}
+                onChange={handlePunjabiTextChange}
+                autoComplete="off"
+                required
+              ></input>
+              <button type="submit">Send to DB</button>
+            </form>
+          </div>
+
+          <button onClick={handleDictionaryLoad}>Load Dictionary</button>
+          <p>Dictionary size: {allWords.length} words</p>
+          <label htmlFor="filter">Filter Dictionary</label>
+          <input id="filter" value={filterWord} onChange={handleFilter} />
+          <p>
+            Filtered words: {filterWord.length === 0 ? 0 : displayFilter.length}{" "}
+            words
+          </p>
+          {filterWord !== "" && (
+            <ul>
+              {displayFilter.map((word) => (
+                <li key={word._id}>
+                  <Link to={`/dictionary/${word._id}`}>{word.phonetic}</Link>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       )}
     </>
   );
@@ -188,6 +224,18 @@ function App() {
   const [dictWord, setDictWord] = useState({});
   const [dictWordConverted, setDictWordConverted] = useState([]);
   const [filterWord, setFilterWord] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem("loggedNoteappUser");
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON);
+      setUser(user);
+      wordService.setToken(user.token);
+    }
+  }, []);
 
   // renderes final converted text
   useEffect(() => {}, [splitFinal]);
@@ -377,6 +425,39 @@ function App() {
     setDropdownVisible(false);
   };
 
+  const handleLogin = async (event) => {
+    event.preventDefault();
+
+    try {
+      const user = await wordService.login({
+        username,
+        password,
+      });
+      window.localStorage.setItem("loggedViakaranUser", JSON.stringify(user));
+      wordService.setToken(user.token);
+      setUser(user);
+      setUsername("");
+      setPassword("");
+    } catch (exception) {
+      alert("Wrong credentials");
+    }
+  };
+
+  const handleLogout = (event) => {
+    window.localStorage.clear();
+    window.location.reload();
+  };
+
+  const handleUserChange = (event) => {
+    console.log(event.target.value);
+    setUsername(event.target.value);
+  };
+
+  const handlePassChange = (event) => {
+    console.log(event.target.value);
+    setPassword(event.target.value);
+  };
+
   const handleDictTextChange = (event) => {
     console.log(event.target.value);
     setDictText(event.target.value);
@@ -503,7 +584,6 @@ function App() {
             />
           }
         />
-
         <Route
           path="/dictionary"
           element={
@@ -519,10 +599,16 @@ function App() {
               filterWord={filterWord}
               handleFilter={handleFilter}
               displayFilter={displayFilter}
+              handleLogin={handleLogin}
+              handleLogout={handleLogout}
+              handleUserChange={handleUserChange}
+              handlePassChange={handlePassChange}
+              username={username}
+              password={password}
+              user={user}
             />
           }
         />
-
         <Route
           path="/dictionary/:id"
           element={
