@@ -15,15 +15,15 @@ const getTokenFrom = (request) => {
 };
 
 dictionRouter.get("/", async (req, res) => {
-  // checks if JWT exists first
-  const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET);
-  if (!decodedToken.id) {
-    return res.status(401).json({ error: "token invalid" });
-  }
-  const user = await User.findById(decodedToken.id);
-  if (!user) {
-    return res.status(400).json({ error: "UserId missing or not valid" });
-  }
+  // // checks if JWT exists first
+  // const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET);
+  // if (!decodedToken.id) {
+  //   return res.status(401).json({ error: "token invalid" });
+  // }
+  // const user = await User.findById(decodedToken.id);
+  // if (!user) {
+  //   return res.status(400).json({ error: "UserId missing or not valid" });
+  // }
 
   let allWords = await Word.find({});
   Array.prototype.sortBy = function (p) {

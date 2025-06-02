@@ -22,61 +22,67 @@ const Home = ({
   divRef,
 }) => {
   return (
-    <div className="row">
-      <div className="col-md-6">
-        <form onSubmit={addText}>
-          <h5>Phonetic Punjabi</h5>
+    <div className="container">
+      <div className="row">
+        <div className="col-md-6">
+          <form onSubmit={addText}>
+            <h5>Phonetic Punjabi</h5>
+            <textarea
+              className="form-control"
+              value={text}
+              onChange={handleTextChange}
+              cols="30"
+              rows="8"
+              maxLength="20480"
+              spellCheck="false"
+              placeholder="sat sri akal!"
+              autoComplete="off"
+              autoFocus
+              required
+            ></textarea>
+            <button className="btn btn-primary" type="submit">
+              Convert Punjabi!
+            </button>
+          </form>
+        </div>
+        <div className="col-md-6">
+          <h5>Converted (Click words!)</h5>
           <textarea
-            value={text}
-            onChange={handleTextChange}
+            className="convertedText form-control"
+            value={finalText}
+            onClick={handleTextClick}
             cols="30"
             rows="8"
-            maxLength="20480"
+            placeholder="ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ!"
             spellCheck="false"
-            placeholder="sat sri akal!"
             autoComplete="off"
-            autoFocus
-            required
+            readOnly
           ></textarea>
-          <button type="submit">Convert Punjabi!</button>
-        </form>
-      </div>
-      <div className="col-md-6">
-        <h5>Converted (Click words!)</h5>
-        <textarea
-          className="convertedText"
-          value={finalText}
-          onClick={handleTextClick}
-          cols="30"
-          rows="8"
-          placeholder="ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ!"
-          spellCheck="false"
-          autoComplete="off"
-          readOnly
-        ></textarea>
-        <button
-          id="copy"
-          type="button"
-          onClick={() => navigator.clipboard.writeText(finalText)}
-        >
-          Copy Panjabi/ਪੰਜਾਬੀ ਕਾਪੀ ਕਰੋ
-        </button>
-        <div
-          ref={divRef}
-          style={{ width: "fit-content" }}
-          className="dropdownContainer"
-        >
-          {visible &&
-            selectedDropdown &&
-            selectedDropdown.map((dropDownItem, i) => (
-              <div
-                className="dropdownItem"
-                key={i}
-                onClick={handleDropDownClick}
-              >
-                {dropDownItem}
-              </div>
-            ))}
+          <button
+            id="copy"
+            className="btn btn-secondary"
+            type="button"
+            onClick={() => navigator.clipboard.writeText(finalText)}
+          >
+            Copy Panjabi/ਪੰਜਾਬੀ ਕਾਪੀ ਕਰੋ
+          </button>
+          <div
+            ref={divRef}
+            style={{ width: "fit-content" }}
+            className="dropdownContainer"
+          >
+            {visible &&
+              selectedDropdown &&
+              selectedDropdown.map((dropDownItem, i) => (
+                <div
+                  className="dropdownItem"
+                  key={i}
+                  onClick={handleDropDownClick}
+                >
+                  {dropDownItem}
+                </div>
+              ))}
+          </div>
         </div>
       </div>
     </div>
@@ -84,7 +90,6 @@ const Home = ({
 };
 
 const Dictionary = ({
-  setDictionary,
   handleDictionaryLoad,
   allWords,
   addToDictionary,
@@ -135,11 +140,14 @@ const Dictionary = ({
       )}
       {user !== null && (
         <div className="container">
-          <button onClick={handleLogout}>Logout</button>
+          <button onClick={handleLogout} className="btn btn-danger">
+            Logout
+          </button>
           <div className="row">
             <form onSubmit={addToDictionary}>
               <label htmlFor="dictPhone">Phonetic Word(s)</label>
               <textarea
+                className="form-control"
                 value={dictText}
                 onChange={handleDictTextChange}
                 id="dictPhone"
@@ -229,7 +237,7 @@ function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem("loggedNoteappUser");
+    const loggedUserJSON = window.localStorage.getItem("loggedViakaranUser");
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
       setUser(user);
@@ -588,7 +596,6 @@ function App() {
           path="/dictionary"
           element={
             <Dictionary
-              setDictionary={setDictionary}
               handleDictionaryLoad={handleDictionaryLoad}
               addToDictionary={addToDictionary}
               allWords={allWords}
