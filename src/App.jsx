@@ -32,7 +32,7 @@ const Home = ({
               value={text}
               onChange={handleTextChange}
               cols="30"
-              rows="8"
+              rows="6"
               maxLength="20480"
               spellCheck="false"
               placeholder="sat sri akal!"
@@ -52,7 +52,7 @@ const Home = ({
             value={finalText}
             onClick={handleTextClick}
             cols="30"
-            rows="8"
+            rows="6"
             placeholder="ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ!"
             spellCheck="false"
             autoComplete="off"
@@ -117,25 +117,34 @@ const Dictionary = ({
     <>
       {user === null && (
         <form onSubmit={handleLogin}>
-          <div>
-            username
+          <div className="form-group">
+            <label htmlFor="inputUsername">Username</label>
             <input
               type="text"
               value={username}
-              name="Username"
               onChange={handleUserChange}
+              name="Username"
+              className="form-control"
+              id="inputUsername"
+              aria-describedby="usernameHelp"
+              placeholder="Enter username"
             />
           </div>
-          <div>
-            password
+          <div className="form-group">
+            <label htmlFor="inputPassword">Password</label>
             <input
               type="password"
               value={password}
               name="Password"
               onChange={handlePassChange}
+              className="form-control"
+              id="inputPassword"
+              placeholder="Password"
             />
           </div>
-          <button type="submit">login</button>
+          <button type="submit" className="btn btn-primary">
+            login
+          </button>
         </form>
       )}
       {user !== null && (
@@ -145,28 +154,30 @@ const Dictionary = ({
           </button>
           <div className="row">
             <form onSubmit={addToDictionary}>
-              <label htmlFor="dictPhone">Phonetic Word(s)</label>
-              <textarea
-                className="form-control"
-                value={dictText}
-                onChange={handleDictTextChange}
-                id="dictPhone"
-                cols="30"
-                rows="8"
-                spellCheck="false"
-                placeholder="add space-separated phonetic words here"
-                autoComplete="off"
-                autoFocus
-              ></textarea>
-              <label htmlFor="dictConverted">Punjabi Word</label>
-              <input
-                type="text"
-                id="dictConverted"
-                value={punjabiWord}
-                onChange={handlePunjabiTextChange}
-                autoComplete="off"
-                required
-              ></input>
+              <div className="form-group">
+                <label htmlFor="dictPhone">Phonetic Word(s)</label>
+                <textarea
+                  className="form-control"
+                  value={dictText}
+                  onChange={handleDictTextChange}
+                  id="dictPhone"
+                  cols="30"
+                  rows="3"
+                  spellCheck="false"
+                  placeholder="add space-separated phonetic words here"
+                  autoComplete="off"
+                  autoFocus
+                ></textarea>
+                <label htmlFor="dictConverted">Punjabi Word</label>
+                <input
+                  type="text"
+                  id="dictConverted"
+                  value={punjabiWord}
+                  onChange={handlePunjabiTextChange}
+                  autoComplete="off"
+                  required
+                ></input>
+              </div>
               <button type="submit">Send to DB</button>
             </form>
           </div>
