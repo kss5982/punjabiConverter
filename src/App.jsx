@@ -26,8 +26,9 @@ const Home = ({
       <div className="row">
         <div className="col-md-6">
           <form onSubmit={addText}>
-            <h5>Phonetic Punjabi</h5>
+            <label htmlFor="phonetic">Phonetic Punjabi</label>
             <textarea
+              id="phonetic"
               className="form-control"
               value={text}
               onChange={handleTextChange}
@@ -46,9 +47,10 @@ const Home = ({
           </form>
         </div>
         <div className="col-md-6">
-          <h5>Converted (Click words!)</h5>
+          <label htmlFor="converted">Converted (Click words!)</label>
           <textarea
             className="convertedText form-control"
+            id="converted"
             value={finalText}
             onClick={handleTextClick}
             cols="30"
@@ -116,36 +118,38 @@ const Dictionary = ({
   return (
     <>
       {user === null && (
-        <form onSubmit={handleLogin}>
-          <div className="form-group">
-            <label htmlFor="inputUsername">Username</label>
-            <input
-              type="text"
-              value={username}
-              onChange={handleUserChange}
-              name="Username"
-              className="form-control"
-              id="inputUsername"
-              aria-describedby="usernameHelp"
-              placeholder="Enter username"
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="inputPassword">Password</label>
-            <input
-              type="password"
-              value={password}
-              name="Password"
-              onChange={handlePassChange}
-              className="form-control"
-              id="inputPassword"
-              placeholder="Password"
-            />
-          </div>
-          <button type="submit" className="btn btn-primary">
-            login
-          </button>
-        </form>
+        <div className="container vh-100 d-flex justify-content-center align-items-center">
+          <form onSubmit={handleLogin} className="login">
+            <div className="form-group mb-4">
+              <label htmlFor="inputUsername"></label>
+              <input
+                type="text"
+                value={username}
+                onChange={handleUserChange}
+                name="Username"
+                className="form-control user-pass"
+                id="inputUsername"
+                aria-describedby="usernameHelp"
+                placeholder="Username"
+              />
+            </div>
+            <div className="form-group mb-4">
+              <label htmlFor="inputPassword"></label>
+              <input
+                type="password"
+                value={password}
+                name="Password"
+                onChange={handlePassChange}
+                className="form-control user-pass"
+                id="inputPassword"
+                placeholder="Password"
+              />
+            </div>
+            <button type="submit" className="btn btn-primary w-100">
+              login
+            </button>
+          </form>
+        </div>
       )}
       {user !== null && (
         <div className="container">
