@@ -25,7 +25,7 @@ const Home = ({
     <div className="container">
       <div className="row">
         <div className="col-md-6">
-          <form onSubmit={addText}>
+          <form onSubmit={addText} className="textareaForms">
             <label htmlFor="phonetic">Phonetic Punjabi</label>
             <textarea
               id="phonetic"
@@ -47,7 +47,7 @@ const Home = ({
           </form>
         </div>
         <div className="col-md-6">
-          <label htmlFor="converted">Converted (Click words!)</label>
+          <label htmlFor="converted">Converted Punjabi</label>
           <textarea
             className="convertedText form-control"
             id="converted"
@@ -153,12 +153,16 @@ const Dictionary = ({
       )}
       {user !== null && (
         <div className="container">
-          <button onClick={handleLogout} className="btn btn-danger">
+          <button
+            onClick={handleLogout}
+            className="btn btn-danger logout btn-lg float-end"
+          >
             Logout
           </button>
+
           <div className="row">
             <form onSubmit={addToDictionary}>
-              <div className="form-group">
+              <div className="form-group col-md-6">
                 <label htmlFor="dictPhone">Phonetic Word(s)</label>
                 <textarea
                   className="form-control"
@@ -179,10 +183,11 @@ const Dictionary = ({
                   value={punjabiWord}
                   onChange={handlePunjabiTextChange}
                   autoComplete="off"
+                  placeholder="add 1 Punjabi word here"
                   required
                 ></input>
+                <button type="submit">Send to DB</button>
               </div>
-              <button type="submit">Send to DB</button>
             </form>
           </div>
 
