@@ -20,6 +20,7 @@ const Home = ({
   visible,
   finalText,
   divRef,
+  position,
 }) => {
   return (
     <div className="container">
@@ -41,7 +42,7 @@ const Home = ({
               autoFocus
               required
             ></textarea>
-            <button className="btn btn-primary" type="submit">
+            <button className="btn btn-primary frontBtn" type="submit">
               Convert Punjabi!
             </button>
           </form>
@@ -62,15 +63,19 @@ const Home = ({
           ></textarea>
           <button
             id="copy"
-            className="btn btn-secondary"
+            className="btn btn-secondary frontBtn"
             type="button"
             onClick={() => navigator.clipboard.writeText(finalText)}
           >
-            Copy Panjabi/ਪੰਜਾਬੀ ਕਾਪੀ ਕਰੋ
+            Copy Punjabi/ਪੰਜਾਬੀ ਕਾਪੀ ਕਰੋ
           </button>
           <div
             ref={divRef}
-            style={{ width: "fit-content" }}
+            style={{
+              width: "fit-content",
+              top: position.y + 10,
+              left: position.x - 10,
+            }}
             className="dropdownContainer"
           >
             {visible &&
@@ -81,7 +86,7 @@ const Home = ({
                   key={i}
                   onClick={handleDropDownClick}
                 >
-                  {dropDownItem}
+                  <strong>{dropDownItem}</strong>
                 </div>
               ))}
           </div>
@@ -255,6 +260,7 @@ function App() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedViakaranUser");
@@ -338,6 +344,7 @@ function App() {
       // console.log("textarea word:", getTextareaWordAndDropdown(i, finalText))
       setSelectedConverted(getTextareaWordAndDropdown(i));
       setDropdownVisible(true);
+      setPosition({ x: event.clientX, y: event.clientY });
     }
   };
 
@@ -609,6 +616,7 @@ function App() {
               handleDropDownClick={handleDropDownClick}
               visible={dropdownVisible}
               divRef={divRef}
+              position={position}
             />
           }
         />
