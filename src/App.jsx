@@ -30,11 +30,9 @@ const Home = ({
             <label htmlFor="phonetic">Phonetic Punjabi</label>
             <textarea
               id="phonetic"
-              className="form-control"
+              className="phoneticText form-control fs-2"
               value={text}
               onChange={handleTextChange}
-              cols="30"
-              rows="6"
               maxLength="20480"
               spellCheck="false"
               placeholder="sat sri akal!"
@@ -50,7 +48,7 @@ const Home = ({
         <div className="col-md-6">
           <label htmlFor="converted">Converted Punjabi</label>
           <textarea
-            className="convertedText form-control"
+            className="convertedText form-control fs-2"
             id="converted"
             value={finalText}
             onClick={handleTextClick}
@@ -82,7 +80,7 @@ const Home = ({
               selectedDropdown &&
               selectedDropdown.map((dropDownItem, i) => (
                 <div
-                  className="dropdownItem"
+                  className="dropdownItem fs-2"
                   key={i}
                   onClick={handleDropDownClick}
                 >

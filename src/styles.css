@@ -59,13 +59,20 @@ body {
   background-color: #EDD1B0;
 }
 
+.navbar-brand{
+  font-size: 3em;
+  padding-left: 5px;
+}
+
 label {
-    font-size: 3em;
+    font-size: 4.5em;
 }
 
 textarea {
-    resize: none;
-    
+  resize: none;
+  height: 45vh;
+  @include rf
+  /* font-size: 20px; */
 }
 
 .frontBtn {
