@@ -23,11 +23,13 @@ const Home = ({
   position,
 }) => {
   return (
-    <div className="container">
+    <div className="container text-center">
       <div className="row">
         <div className="col-md-6">
           <form onSubmit={addText} className="textareaForms">
-            <label htmlFor="phonetic">Phonetic Punjabi</label>
+            <label className="frontLabel text-center" htmlFor="phonetic">
+              Phonetic Punjabi
+            </label>
             <textarea
               id="phonetic"
               className="phoneticText form-control fs-2"
@@ -46,7 +48,9 @@ const Home = ({
           </form>
         </div>
         <div className="col-md-6">
-          <label htmlFor="converted">Converted Punjabi</label>
+          <label htmlFor="converted" className="frontLabel">
+            Converted Punjabi
+          </label>
           <textarea
             className="convertedText form-control fs-2"
             id="converted"
@@ -588,8 +592,8 @@ function App() {
         </button>
         <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div className="navbar-nav">
-            <a className="nav-item nav-link" href="/help">
-              Help<span className="sr-only"></span>
+            <a className="nav-item nav-link beta" href="/">
+              Beta<span className="sr-only"></span>
             </a>
           </div>
           <div className="navbar-nav ms-auto">

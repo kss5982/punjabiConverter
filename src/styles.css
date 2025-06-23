@@ -61,11 +61,16 @@ body {
 
 .navbar-brand{
   font-size: 3em;
-  padding-left: 5px;
+  padding-left: 7px;
 }
 
 label {
     font-size: 4.5em;
+}
+
+.beta {
+  margin-top: -10px;
+  margin-left: -23px;
 }
 
 textarea {
