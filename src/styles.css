@@ -64,20 +64,25 @@ body {
   padding-left: 7px;
 }
 
-label {
-    font-size: 4.5em;
-}
-
 .beta {
   margin-top: -10px;
   margin-left: -23px;
 }
 
-textarea {
+.description {
+  margin-top: 10px;
+  font-size: 1.5em;
+}
+
+.frontLabel {
+    font-size: 4.2em;
+    margin-top: -25px;
+}
+
+.frontTextarea {
   resize: none;
-  height: 45vh;
-  @include rf
-  /* font-size: 20px; */
+  height: 50vh;
+  width: 100%;
 }
 
 .frontBtn {
@@ -111,6 +116,10 @@ textarea {
   padding: 20px;
 }
 
+.logout {
+  width: 100%;
+  margin-bottom: 10px;
+}
 
 .user-pass{
   border: 1px solid black;

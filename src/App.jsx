@@ -24,6 +24,9 @@ const Home = ({
 }) => {
   return (
     <div className="container text-center">
+      <p className="description">
+        <em>A free and accurate Punjabi transliteration tool</em>
+      </p>
       <div className="row">
         <div className="col-md-6">
           <form onSubmit={addText} className="textareaForms">
@@ -32,7 +35,7 @@ const Home = ({
             </label>
             <textarea
               id="phonetic"
-              className="phoneticText form-control fs-2"
+              className="frontTextarea form-control fs-2"
               value={text}
               onChange={handleTextChange}
               maxLength="20480"
@@ -52,7 +55,7 @@ const Home = ({
             Converted Punjabi
           </label>
           <textarea
-            className="convertedText form-control fs-2"
+            className="frontTextarea form-control fs-2"
             id="converted"
             value={finalText}
             onClick={handleTextClick}
@@ -160,61 +163,90 @@ const Dictionary = ({
       )}
       {user !== null && (
         <div className="container">
-          <button
-            onClick={handleLogout}
-            className="btn btn-danger logout btn-lg float-end"
-          >
-            Logout
-          </button>
-
           <div className="row">
-            <form onSubmit={addToDictionary}>
-              <div className="form-group col-md-6">
-                <label htmlFor="dictPhone">Phonetic Word(s)</label>
-                <textarea
-                  className="form-control"
-                  value={dictText}
-                  onChange={handleDictTextChange}
-                  id="dictPhone"
-                  cols="30"
-                  rows="3"
-                  spellCheck="false"
-                  placeholder="add space-separated phonetic words here"
-                  autoComplete="off"
-                  autoFocus
-                ></textarea>
-                <label htmlFor="dictConverted">Punjabi Word</label>
-                <input
-                  type="text"
-                  id="dictConverted"
-                  value={punjabiWord}
-                  onChange={handlePunjabiTextChange}
-                  autoComplete="off"
-                  placeholder="add 1 Punjabi word here"
-                  required
-                ></input>
-                <button type="submit">Send to DB</button>
-              </div>
-            </form>
+            <div className="col-auto ml-auto ms-auto">
+              <button
+                onClick={handleLogout}
+                className="btn btn-danger logout btn-lg"
+              >
+                Logout
+              </button>
+            </div>
           </div>
+          <div className="row">
+            <div className="col-md-4 my-auto">
+              <form onSubmit={addToDictionary}>
+                <div className="form-group">
+                  <label htmlFor="dictPhone" className="backLabel">
+                    Phonetic Word(s)
+                  </label>
+                  <textarea
+                    className="backTextarea form-control"
+                    value={dictText}
+                    onChange={handleDictTextChange}
+                    id="dictPhone"
+                    cols="30"
+                    rows="3"
+                    spellCheck="false"
+                    placeholder="add space-separated phonetic words here"
+                    autoComplete="off"
+                    autoFocus
+                    required
+                  ></textarea>
+                  <label htmlFor="dictConverted">Punjabi Word</label>
+                  <input
+                    type="text"
+                    id="dictConverted"
+                    className="backInput"
+                    value={punjabiWord}
+                    onChange={handlePunjabiTextChange}
+                    autoComplete="off"
+                    placeholder="Add 1 Punjabi word here"
+                    required
+                  ></input>
+                  <button className="backButton" type="submit">
+                    Send to DB
+                  </button>
+                </div>
+              </form>
+            </div>
 
-          <button onClick={handleDictionaryLoad}>Load Dictionary</button>
-          <p>Dictionary size: {allWords.length} words</p>
-          <label htmlFor="filter">Filter Dictionary</label>
-          <input id="filter" value={filterWord} onChange={handleFilter} />
-          <p>
-            Filtered words: {filterWord.length === 0 ? 0 : displayFilter.length}{" "}
-            words
-          </p>
-          {filterWord !== "" && (
-            <ul>
-              {displayFilter.map((word) => (
-                <li key={word._id}>
-                  <Link to={`/dictionary/${word._id}`}>{word.phonetic}</Link>
-                </li>
-              ))}
-            </ul>
-          )}
+            <div className="col-md-4 text-center my-auto">
+              <p className="backLabel">
+                Dictionary size: {allWords.length} words
+              </p>
+              <button className="backButton" onClick={handleDictionaryLoad}>
+                Load Dictionary
+              </button>
+            </div>
+            <div className="col-md-4 text-center my-auto">
+              <label className="backLabel" htmlFor="filter">
+                Filter Dictionary
+              </label>
+              <input
+                className="backInput"
+                id="filter"
+                value={filterWord}
+                onChange={handleFilter}
+                placeholder="Type phonetic word here"
+              />
+              <p className="backLabel">
+                Filtered words:{" "}
+                {filterWord.length === 0 ? 0 : displayFilter.length} words
+              </p>
+              {filterWord !== "" && (
+                <ul>
+                  {displayFilter.map((word) => (
+                    <li className="backLabel" key={word._id}>
+                      <Link to={`/dictionary/${word._id}`}>
+                        {word.phonetic}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
         </div>
       )}
     </>
@@ -579,21 +611,10 @@ function App() {
         <Link className="navbar-brand" to="/">
           Viakaran
         </Link>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNavAltMarkup"
-          aria-controls="navbarNavAltMarkup"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
         <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div className="navbar-nav">
             <a className="nav-item nav-link beta" href="/">
-              Beta<span className="sr-only"></span>
+              Beta
             </a>
           </div>
           <div className="navbar-nav ms-auto">
