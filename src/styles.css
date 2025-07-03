@@ -71,17 +71,17 @@ body {
 
 .description {
   margin-top: 10px;
+  margin-bottom: 5px;
   font-size: 1.5em;
 }
 
 .frontLabel {
-    font-size: 4.2em;
-    margin-top: -25px;
+    font-size: 2.5em;
 }
 
 .frontTextarea {
   resize: none;
-  height: 50vh;
+  height: 55vh;
   width: 100%;
 }
 
@@ -116,14 +116,26 @@ body {
   padding: 20px;
 }
 
+.user-pass{
+  border: 1px solid black;
+}
+
 .logout {
   width: 100%;
   margin-bottom: 10px;
 }
 
-.user-pass{
-  border: 1px solid black;
+.backLabel {
+  font-size: 2rem;
 }
+
+.backTextarea {
+  resize: none;
+  height: 20vh;
+  width: 100%;
+}
+
+
 
 /* .dropdownItem:nth-child(n+5) {
     grid-column: 2;

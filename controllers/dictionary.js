@@ -15,6 +15,7 @@ const getTokenFrom = (request) => {
 };
 
 dictionRouter.get("/", async (req, res) => {
+  console.log(req.query);
   // // checks if JWT exists first
   // const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET);
   // if (!decodedToken.id) {
@@ -24,8 +25,18 @@ dictionRouter.get("/", async (req, res) => {
   // if (!user) {
   //   return res.status(400).json({ error: "UserId missing or not valid" });
   // }
+  let allWords;
+  //Non-alpha characters
+  if (req.query.buttonValue === "*") {
+    allWords = await Word.find({
+      phonetic: /[^a-zA-Z]/,
+    });
+  } else {
+    allWords = await Word.find({
+      phonetic: RegExp("^" + req.query.buttonValue),
+    });
+  }
 
-  let allWords = await Word.find({});
   Array.prototype.sortBy = function (p) {
     return this.slice(0).sort(function (a, b) {
       return a[p] > b[p] ? 1 : a[p] < b[p] ? -1 : 0;

@@ -27,8 +27,8 @@ const Home = ({
       <p className="description">
         <em>A free and accurate Punjabi transliteration tool</em>
       </p>
-      <div className="row">
-        <div className="col-md-6">
+      <div className="row justify-content-center">
+        <div className="col-md-5">
           <form onSubmit={addText} className="textareaForms">
             <label className="frontLabel text-center" htmlFor="phonetic">
               Phonetic Punjabi
@@ -50,7 +50,7 @@ const Home = ({
             </button>
           </form>
         </div>
-        <div className="col-md-6">
+        <div className="col-md-5">
           <label htmlFor="converted" className="frontLabel">
             Converted Punjabi
           </label>
@@ -174,7 +174,7 @@ const Dictionary = ({
             </div>
           </div>
           <div className="row">
-            <div className="col-md-4 my-auto">
+            <div className="col-md-6">
               <form onSubmit={addToDictionary}>
                 <div className="form-group">
                   <label htmlFor="dictPhone" className="backLabel">
@@ -193,7 +193,7 @@ const Dictionary = ({
                     autoFocus
                     required
                   ></textarea>
-                  <label htmlFor="dictConverted">Punjabi Word</label>
+                  <label htmlFor="dictConverted backLabel">Punjabi Word</label>
                   <input
                     type="text"
                     id="dictConverted"
@@ -211,16 +211,24 @@ const Dictionary = ({
               </form>
             </div>
 
-            <div className="col-md-4 text-center my-auto">
+            <div className="col-md-6 my-auto">
               <p className="backLabel">
                 Dictionary size: {allWords.length} words
               </p>
-              <button className="backButton" onClick={handleDictionaryLoad}>
+              {/* <button className="backButton" onClick={handleDictionaryLoad}>
                 Load Dictionary
-              </button>
-            </div>
-            <div className="col-md-4 text-center my-auto">
-              <label className="backLabel" htmlFor="filter">
+              </button> */}
+              {"abcdefghijklmnopqrstuvwxyz*".split("").map((letter) => (
+                <button
+                  className="backButton"
+                  onClick={handleDictionaryLoad}
+                  key={letter}
+                >
+                  {letter.toUpperCase()}
+                </button>
+              ))}
+
+              <label className="backLabel d-block" htmlFor="filter">
                 Filter Dictionary
               </label>
               <input
@@ -246,6 +254,9 @@ const Dictionary = ({
                 </ul>
               )}
             </div>
+            {/* <div className="col-md-4 text-center my-auto">
+              
+            </div> */}
           </div>
         </div>
       )}
@@ -285,7 +296,7 @@ function App() {
   const [dropdownVisible, setDropdownVisible] = useState(false); // toggles dropdown div
   const divRef = useRef(null); // required for detecting clicks outside dropdown div
   // below are states used in the 'dictionary' portion of the site
-  const [allWords, setAllWords] = useState([]);
+  const [allWords, setLoadedWords] = useState([]);
   const [dictText, setDictText] = useState("");
   const [punjabiWord, setPunjabiWord] = useState("");
   const [dictWord, setDictWord] = useState({});
@@ -537,15 +548,17 @@ function App() {
     setPunjabiWord(event.target.value);
   };
 
-  const handleDictionaryLoad = () => {
-    setDictionary();
+  const handleDictionaryLoad = (event) => {
+    //this is the button's text value
+    const buttonText = event.target.textContent.toLowerCase();
+    setDictionary(buttonText);
   };
 
-  const setDictionary = () => {
+  const setDictionary = (buttonText) => {
     wordService
-      .getDictionary()
+      .getDictionary(buttonText)
       .then((response) => {
-        setAllWords(response);
+        setLoadedWords(response);
         console.log(response);
       })
       .catch((error) => console.log(error));

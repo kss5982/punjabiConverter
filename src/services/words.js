@@ -28,12 +28,15 @@ const login = async (credentials) => {
   return response.data;
 };
 
-const getDictionary = async () => {
-  const config = {
-    headers: { Authorization: token },
-  };
+const getDictionary = async (buttonText) => {
+  // const config = {
+  //   headers: { Authorization: token },
+  // };
   // console.log("in service", phoneticPunjabi);
-  const response = await axios.get("/api/dictionary", config);
+  console.log("in service", buttonText);
+  const response = await axios.get("/api/dictionary", {
+    params: { buttonValue: buttonText },
+  });
   return response.data;
 };
 
