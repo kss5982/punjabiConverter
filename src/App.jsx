@@ -19,6 +19,8 @@ const Home = ({
   handleDropDownClick,
   visible,
   finalText,
+  copyText,
+  handleCopyClick,
   divRef,
   position,
 }) => {
@@ -70,9 +72,9 @@ const Home = ({
             id="copy"
             className="btn btn-secondary frontBtn"
             type="button"
-            onClick={() => navigator.clipboard.writeText(finalText)}
+            onClick={handleCopyClick}
           >
-            Copy Punjabi/ਪੰਜਾਬੀ ਕਾਪੀ ਕਰੋ
+            {copyText}
           </button>
           <div
             ref={divRef}
@@ -291,6 +293,8 @@ function App() {
   const [dropdownList, setDropdownList] = useState([]); // list of all dropdown arrays in an array
   const [selectedConverted, setSelectedConverted] = useState(""); // clicked converted word
   const [selectedDropdown, setSelectedDropdown] = useState([]); // selected dropdown menu
+  const [copyText, setCopyText] = useState("Copy Punjabi/ਪੰਜਾਬੀ ਕਾਪੀ ਕਰੋ");
+  const [isCopied, setIsCopied] = useState(false);
   const [dropdownWord, setDropdownWord] = useState(""); // clicked dropdown word
   const [convertedIndex, setConvertedIndex] = useState(); // retains position of clicked word
   const [dropdownVisible, setDropdownVisible] = useState(false); // toggles dropdown div
@@ -505,6 +509,25 @@ function App() {
     setDropdownVisible(false);
   };
 
+  const handleCopyClick = async () => {
+    try {
+      await navigator.clipboard.writeText(splitFinal.join(" "));
+      setCopyText("Copied!/ਕਾਪੀ ਹੋਗਿਆ!");
+      setIsCopied(true);
+
+      // Revert button text after 2 seconds
+      setTimeout(() => {
+        setCopyText("Copy Punjabi/ਪੰਜਾਬੀ ਕਾਪੀ ਕਰੋ");
+        setIsCopied(false);
+      }, 3500); // 3000 milliseconds = 3 seconds
+    } catch (err) {
+      console.error("Failed to copy text: ", err);
+      // Optionally, set an error message on the button
+      setCopyText("Error!");
+      setTimeout(() => setCopyText("Copy"), 2000);
+    }
+  };
+
   const handleLogin = async (event) => {
     event.preventDefault();
 
@@ -650,6 +673,8 @@ function App() {
               handleTextClick={handleTextClick}
               selectedDropdown={selectedDropdown}
               handleDropDownClick={handleDropDownClick}
+              copyText={copyText}
+              handleCopyClick={handleCopyClick}
               visible={dropdownVisible}
               divRef={divRef}
               position={position}
