@@ -135,7 +135,26 @@ body {
   width: 100%;
 }
 
+.backButton {
+  margin: 2px;
+}
 
+.addToMongo {
+  margin-top: 5px;
+}
+
+.wordTitle {
+  margin-left: 10px;
+}
+
+.wordList {
+  font-size: 2rem;
+  margin-left: 10px;
+}
+
+.dltWord {
+  margin-left: 10px;
+}
 
 /* .dropdownItem:nth-child(n+5) {
     grid-column: 2;

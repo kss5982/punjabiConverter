@@ -180,7 +180,7 @@ const Dictionary = ({
               <form onSubmit={addToDictionary}>
                 <div className="form-group">
                   <label htmlFor="dictPhone" className="backLabel">
-                    Phonetic Word(s)
+                    Phonetic Word(s) to Add to Database
                   </label>
                   <textarea
                     className="backTextarea form-control"
@@ -190,23 +190,25 @@ const Dictionary = ({
                     cols="30"
                     rows="3"
                     spellCheck="false"
-                    placeholder="add space-separated phonetic words here"
+                    placeholder="List SPACE-SEPARATED phonetic words here ONLY"
                     autoComplete="off"
                     autoFocus
                     required
                   ></textarea>
-                  <label htmlFor="dictConverted backLabel">Punjabi Word</label>
+                  <label htmlFor="dictConverted" className="backLabel">
+                    Punjabi Word to Add to Database
+                  </label>
                   <input
                     type="text"
                     id="dictConverted"
-                    className="backInput"
+                    className="backInput form-control"
                     value={punjabiWord}
                     onChange={handlePunjabiTextChange}
                     autoComplete="off"
                     placeholder="Add 1 Punjabi word here"
                     required
                   ></input>
-                  <button className="backButton" type="submit">
+                  <button className="btn btn-primary addToMongo" type="submit">
                     Send to DB
                   </button>
                 </div>
@@ -222,7 +224,7 @@ const Dictionary = ({
               </button> */}
               {"abcdefghijklmnopqrstuvwxyz*".split("").map((letter) => (
                 <button
-                  className="backButton"
+                  className="btn btn-secondary backButton"
                   onClick={handleDictionaryLoad}
                   key={letter}
                 >
@@ -231,14 +233,14 @@ const Dictionary = ({
               ))}
 
               <label className="backLabel d-block" htmlFor="filter">
-                Filter Dictionary
+                Filter Words (Click a button letter first!)
               </label>
               <input
-                className="backInput"
+                className="backInput form-control"
                 id="filter"
                 value={filterWord}
                 onChange={handleFilter}
-                placeholder="Type phonetic word here"
+                placeholder="Start typing a phonetic word here"
               />
               <p className="backLabel">
                 Filtered words:{" "}
@@ -273,14 +275,19 @@ const Word = ({ getOneWord, dictWord, dictWordConverted, deleteWord }) => {
   }, []);
   return (
     <>
-      <h1>{dictWord.phonetic}</h1>
-      <ul>
+      <h1 className="wordTitle">{dictWord.phonetic}</h1>
+      <ul className="wordList">
         {dictWordConverted.map((word, index) => (
           <li key={index}>{word}</li>
         ))}
       </ul>
       <Link to={`/dictionary`}>
-        <button onClick={() => deleteWord(match.params.id)}>Delete</button>
+        <button
+          className="btn btn-danger dltWord"
+          onClick={() => deleteWord(match.params.id)}
+        >
+          Delete
+        </button>
       </Link>
     </>
   );
