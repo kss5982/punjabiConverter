@@ -37,12 +37,12 @@ const Home = ({
             </label>
             <textarea
               id="phonetic"
-              className="frontTextarea form-control fs-2"
+              className="frontTextarea form-control fs-3"
               value={text}
               onChange={handleTextChange}
               maxLength="20480"
               spellCheck="false"
-              placeholder="sat sri akal!"
+              placeholder="Type or copy & paste Punjabi in this box (e.g. 'sat sri akal'), then press the Convert button. Words in the right box can be clicked to show alternate conversions."
               autoComplete="off"
               autoFocus
               required
@@ -57,7 +57,7 @@ const Home = ({
             Converted Punjabi
           </label>
           <textarea
-            className="frontTextarea form-control fs-2"
+            className="frontTextarea form-control fs-3"
             id="converted"
             value={finalText}
             onClick={handleTextClick}
@@ -277,9 +277,8 @@ const Word = ({ getOneWord, dictWord, dictWordConverted, deleteWord }) => {
     <>
       <h1 className="wordTitle">{dictWord.phonetic}</h1>
       <ul className="wordList">
-        {dictWordConverted.map((word, index) => (
-          <li key={index}>{word}</li>
-        ))}
+        {dictWord &&
+          dictWordConverted.map((word, index) => <li key={index}>{word}</li>)}
       </ul>
       <Link to={`/dictionary`}>
         <button
