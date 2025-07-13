@@ -27,13 +27,13 @@ const Home = ({
   return (
     <div className="container text-center">
       <p className="description">
-        <em>A free and accurate Punjabi transliteration tool</em>
+        <em>A free and accurate Panjabi transliteration tool</em>
       </p>
       <div className="row justify-content-center">
         <div className="col-md-5">
           <form onSubmit={addText} className="textareaForms">
             <label className="frontLabel text-center" htmlFor="phonetic">
-              Phonetic Punjabi
+              Phonetic Panjabi
             </label>
             <textarea
               id="phonetic"
@@ -42,19 +42,21 @@ const Home = ({
               onChange={handleTextChange}
               maxLength="20480"
               spellCheck="false"
-              placeholder="Type or copy & paste Punjabi in this box (e.g. 'sat sri akal'), then press the Convert button. Words in the right box can be clicked to show alternate conversions."
+              placeholder="ਇਸ ਖ਼ਾਨੇ ਵਿੱਚ ਅੰਗਰੇਜ਼ੀ ਲਿਪੀ ਵਾਲ਼ੀ ਪੰਜਾਬੀ ਟਾਈਪ ਕਰੋ ਜਾਂ ਕਾਪੀ/ਪੇਸਟ ਕਰੋ (ਜਿਵੇਂ ਕਿ Sat sri akal) ਕਨਵਰਟ ਬਟਨ ਦੱਬਣ ਨਾਲ਼ ਲਿਖਤ ਗੁਰਮੁਖੀ 'ਚ ਬਦਲ ਜਾਵੇਗੀ। ਬਦਲੇ ਹੋਏ ਗੁਰਮੁਖੀ ਲਫ਼ਜ਼ 'ਤੇ ਕਲਿੱਕ ਕਰਕੇ (Sat ਤੋਂ ਸਤਿ, ਸਤ, ਸੱਤ, ਸੱਟ) ਕੋਈ ਵੀ ਲਫ਼ਜ਼ ਚੁਣ ਸਕਦੇ ਹਾਂ।
+              
+Type or copy & paste Panjabi in this box (e.g. 'sat sri akal'), then press the 'Convert' button. Words in the other box can be clicked to show more variations."
               autoComplete="off"
               autoFocus
               required
             ></textarea>
             <button className="btn btn-primary frontBtn" type="submit">
-              Convert Punjabi!
+              Convert/ਗੁਰਮੁਖੀ ਵਿੱਚ ਬਦਲੋ
             </button>
           </form>
         </div>
         <div className="col-md-5">
           <label htmlFor="converted" className="frontLabel">
-            Converted Punjabi
+            Converted Panjabi
           </label>
           <textarea
             className="frontTextarea form-control fs-3"
@@ -63,7 +65,6 @@ const Home = ({
             onClick={handleTextClick}
             cols="30"
             rows="6"
-            placeholder="ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ!"
             spellCheck="false"
             autoComplete="off"
             readOnly
@@ -299,7 +300,7 @@ function App() {
   const [dropdownList, setDropdownList] = useState([]); // list of all dropdown arrays in an array
   const [selectedConverted, setSelectedConverted] = useState(""); // clicked converted word
   const [selectedDropdown, setSelectedDropdown] = useState([]); // selected dropdown menu
-  const [copyText, setCopyText] = useState("Copy Punjabi/ਪੰਜਾਬੀ ਕਾਪੀ ਕਰੋ");
+  const [copyText, setCopyText] = useState("Copy/ਪੰਜਾਬੀ ਕਾਪੀ ਕਰੋ");
   const [isCopied, setIsCopied] = useState(false);
   const [dropdownWord, setDropdownWord] = useState(""); // clicked dropdown word
   const [convertedIndex, setConvertedIndex] = useState(); // retains position of clicked word
@@ -523,7 +524,7 @@ function App() {
 
       // Revert button text after 2 seconds
       setTimeout(() => {
-        setCopyText("Copy Punjabi/ਪੰਜਾਬੀ ਕਾਪੀ ਕਰੋ");
+        setCopyText("Copy/ਪੰਜਾਬੀ ਕਾਪੀ ਕਰੋ");
         setIsCopied(false);
       }, 3500); // 3000 milliseconds = 3 seconds
     } catch (err) {
