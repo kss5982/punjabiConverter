@@ -27,7 +27,7 @@ const Home = ({
   return (
     <div className="container text-center">
       <p className="description">
-        <em>A free and accurate Panjabi transliteration tool</em>
+        <em>A phonetic English to Panjabi transliteration tool</em>
       </p>
       <div className="row justify-content-center">
         <div className="col-md-5">
