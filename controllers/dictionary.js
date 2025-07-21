@@ -77,7 +77,7 @@ dictionRouter.delete("/:id", async (req, res) => {
 
   const { id } = req.params;
   await Word.findByIdAndDelete(id);
-  res.status(200);
+  res.status(200).send();
 });
 
 dictionRouter.post("/", async (req, res) => {
@@ -92,7 +92,11 @@ dictionRouter.post("/", async (req, res) => {
   }
 
   console.log("request body:", req.body);
-  let english = await req.body.phonetic.trim().toLowerCase().split(" ");
+  let english = await req.body.phonetic
+    .trim()
+    .toLowerCase()
+    .split(/( |\n|[_]|\b)/)
+    .filter((word) => word !== "" && word !== " " && word !== "\n");
   console.log("english word(s):", english);
   const punjabi = await req.body.converted.trim();
   console.log("punjabi word(s):", punjabi);
@@ -117,7 +121,7 @@ dictionRouter.post("/", async (req, res) => {
           .then((data) => {
             console.log("IT WORKED!");
             console.log(data);
-            // res.send(addWord);
+            // res.status(200).send();
           })
           .catch((err) => {
             console.log("ERROR");
