@@ -505,6 +505,8 @@ function App() {
   useEffect(() => {
     console.log("selected dropdown word:", dropdownWord);
     swapWordFromDropdown(convertedIndex, dropdownWord);
+    setConvertedIndex(null);
+    setDropdownWord("");
   }, [dropdownWord]);
 
   // extracts value from dropdown menu
