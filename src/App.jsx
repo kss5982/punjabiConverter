@@ -33,7 +33,7 @@ const Home = ({
         <div className="col-md-5">
           <form onSubmit={addText} className="textareaForms">
             <label className="frontLabel text-center" htmlFor="phonetic">
-              Phonetic Gurmukhi
+              Phonetic Panjabi
             </label>
             <textarea
               id="phonetic"
