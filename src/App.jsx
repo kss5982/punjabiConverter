@@ -27,13 +27,13 @@ const Home = ({
   return (
     <div className="container text-center">
       <p className="description">
-        <em>A phonetic English to Panjabi transliteration tool</em>
+        <em>A phonetic English to Gurmukhi transliteration tool</em>
       </p>
       <div className="row justify-content-center">
         <div className="col-md-5">
           <form onSubmit={addText} className="textareaForms">
             <label className="frontLabel text-center" htmlFor="phonetic">
-              Phonetic Panjabi
+              Phonetic Gurmukhi
             </label>
             <textarea
               id="phonetic"
@@ -55,7 +55,7 @@ Type or copy & paste Panjabi in this box (e.g. 'sat sri akal'), then press the '
         </div>
         <div className="col-md-5">
           <label htmlFor="converted" className="frontLabel">
-            Converted Panjabi
+            Gurmukhi Script
           </label>
           <textarea
             className="frontTextarea form-control fs-3"
@@ -505,8 +505,8 @@ function App() {
   useEffect(() => {
     console.log("selected dropdown word:", dropdownWord);
     swapWordFromDropdown(convertedIndex, dropdownWord);
-    setConvertedIndex(null);
-    setDropdownWord("");
+    setConvertedIndex(null); // resets clicked word index
+    setDropdownWord(""); // resets dropdown word
   }, [dropdownWord]);
 
   // extracts value from dropdown menu
