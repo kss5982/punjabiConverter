@@ -17,21 +17,23 @@ convertRouter.post("/", async (req, res) => {
 
   // console.log(phoneticTextArr);
   let copyOfPhoneticArray = phoneticTextArr.slice();
+  // console.log(copyOfPhoneticArray);
   let convertedArrayObj = [];
   let fuzzySearch = [];
   // console.log("Array length: ", phoneticTextArr.length);
   // sends ~100 words max to database at a time from total phonetic words
-  for (let i = 0; i <= Math.floor(phoneticTextArr.length / 100); i++) {
+  for (let i = 0; i <= Math.floor(phoneticTextArr.length / 50); i++) {
     // pings database and returns a large array of objects
     fuzzySearch = await Word.aggregate().search({
+      index: "punjabiWordsIndex",
       text: {
-        query: copyOfPhoneticArray.splice(0, 100),
+        query: copyOfPhoneticArray.splice(0, 49),
         path: "phonetic",
         fuzzy: { maxEdits: 1, prefixLength: 1 },
       },
     });
     convertedArrayObj.push(fuzzySearch);
-    // console.log(convertedArrayObj);
+    // console.log("fuzzy result: ", convertedArrayObj);
   }
 
   // configures FuseJS fuzzy search
