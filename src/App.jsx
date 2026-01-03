@@ -319,11 +319,6 @@ function App() {
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    initGA();
-    logPageView(); // Log initial page view
-  }, []);
-
-  useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedViakaranUser");
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
