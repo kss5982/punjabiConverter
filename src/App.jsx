@@ -9,6 +9,7 @@ import {
   useMatch,
   Navigate,
 } from "react-router-dom";
+import { initGA, logPageView } from "./services/analytics.js";
 
 const Home = ({
   addText,
@@ -316,6 +317,11 @@ function App() {
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    initGA();
+    logPageView(); // Log initial page view
+  }, []);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedViakaranUser");
