@@ -3,11 +3,11 @@
   <head>
     <meta http-equiv="Content-Security-Policy" content="
       default-src 'self';
-      script-src 'self' https://www.googletagmanager.com *.google-analytics.com *.analytics.google.com;
-      style-src 'self' 'unsafe-inline' //cdn.jsdelivr.net;
-      img-src 'self' data: https://www.googletagmanager.com;
-      font-src 'self' //cdn.jsdelivr.net https://fonts.gstatic.com;
-      connect-src 'self' https://www.googletagmanager.com;
+      script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.google-analytics.com;
+      style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com;
+      img-src 'self' data: https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com;
+      font-src 'self' https://cdn.jsdelivr.net https://fonts.gstatic.com;
+      connect-src 'self' https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com;
     ">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3DE587S111"></script>
