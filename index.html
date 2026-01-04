@@ -3,10 +3,10 @@
   <head>
     <meta http-equiv="Content-Security-Policy" content="
       default-src 'self';
-      script-src 'self' https://www.googletagmanager.com;
-      style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;
+      script-src 'self' https://www.googletagmanager.com *.google-analytics.com *.analytics.google.com;
+      style-src 'self' 'unsafe-inline' //cdn.jsdelivr.net;
       img-src 'self' data: https://www.googletagmanager.com;
-      font-src 'self' https://cdn.jsdelivr.net https://fonts.gstatic.com;
+      font-src 'self' //cdn.jsdelivr.net https://fonts.gstatic.com;
       connect-src 'self' https://www.googletagmanager.com;
     ">
     <!-- Google tag (gtag.js) -->

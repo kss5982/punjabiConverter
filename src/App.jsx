@@ -9,7 +9,7 @@ import {
   useMatch,
   Navigate,
 } from "react-router-dom";
-import { initGA, logPageView } from "./services/analytics.js";
+// import { initGA, logPageView } from "./services/analytics.js";
 
 const Home = ({
   addText,
