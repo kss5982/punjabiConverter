@@ -24,6 +24,7 @@ export default defineConfig({
           "https://www.googletagmanager.com",
         ], // Example: Allow Google Analytics
         "connect-src": [
+          "'self'",
           "https://www.google-analytics.com",
           "https://cdn.jsdelivr.net",
         ],
