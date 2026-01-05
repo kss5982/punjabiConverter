@@ -23,7 +23,10 @@ export default defineConfig({
           "https://cdn.jsdelivr.net",
           "https://www.googletagmanager.com",
         ], // Example: Allow Google Analytics
-        "connect-src": ["https://cdn.jsdelivr.net"],
+        "connect-src": [
+          "https://www.google-analytics.com",
+          "https://cdn.jsdelivr.net",
+        ],
         "style-src-elem": ["'self'", "https://cdn.jsdelivr.net"], // Allow bootstrap stylesheet
       },
     }),

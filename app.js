@@ -26,7 +26,11 @@ mongoose
   });
 
 const app = express();
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: false, // This disables the CSP header
+  })
+);
 app.use(cors());
 app.use(morgan("tiny"));
 app.use(express.static("dist"));
