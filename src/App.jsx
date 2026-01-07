@@ -12,7 +12,7 @@ import {
 // import { initGA, logPageView } from "./services/analytics.js";
 
 const Home = ({
-  addText,
+  convertText,
   text,
   handleTextChange,
   handleTextClick,
@@ -28,11 +28,11 @@ const Home = ({
   return (
     <div className="container text-center">
       <p className="description">
-        <em>A phonetic English to Gurmukhi transliteration tool</em>
+        <em>A Phonetic Panjabi to Gurmukhi Transliteration Tool</em>
       </p>
       <div className="row justify-content-center">
         <div className="col-md-5">
-          <form onSubmit={addText} className="textareaForms">
+          <form onSubmit={convertText} className="textareaForms">
             <label className="frontLabel text-center" htmlFor="phonetic">
               Phonetic Panjabi
             </label>
@@ -330,8 +330,14 @@ function App() {
   // renderes final converted text
   useEffect(() => {}, [splitFinal]);
 
-  const addText = (event) => {
+  const convertText = (event) => {
     event.preventDefault();
+    if (window.gtag) {
+      window.gtag("event", "convert_text", {
+        button_name: "Convert Panjabi",
+      });
+    }
+
     const phoneticTextarea = { payload: text };
     wordService
       .convert(phoneticTextarea)
@@ -675,7 +681,7 @@ function App() {
           path="/"
           element={
             <Home
-              addText={addText}
+              convertText={convertText}
               text={text}
               finalText={splitFinal.join(" ")}
               handleTextChange={handleTextChange}
