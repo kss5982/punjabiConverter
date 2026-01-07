@@ -332,12 +332,6 @@ function App() {
 
   const convertText = (event) => {
     event.preventDefault();
-    if (window.gtag) {
-      window.gtag("event", "convert_text", {
-        button_name: "Convert Panjabi",
-      });
-    }
-
     const phoneticTextarea = { payload: text };
     wordService
       .convert(phoneticTextarea)
