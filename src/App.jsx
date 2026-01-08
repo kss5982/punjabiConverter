@@ -403,6 +403,13 @@ function App() {
   // identifies clicked word from textarea
   const handleTextClick = (event) => {
     let i = event.target.selectionStart;
+    // google analytics code to monitor text being clicked
+    if (window.gtag) {
+      window.gtag("event", "dropdown_menu", {
+        event_category: "Engagement",
+        event_label: "Dropdown Menu",
+      });
+    }
     // console.log(i)
     // stops dropdown menu from showing if clicking past last word
     if (i !== splitFinal.join(" ").length) {
@@ -521,6 +528,13 @@ function App() {
 
   // extracts value from dropdown menu
   const handleDropDownClick = (event) => {
+    // google analytics code to monitor dropdown word being selected
+    if (window.gtag) {
+      window.gtag("event", "dropdown_word", {
+        event_category: "Engagement",
+        event_label: "Dropdown Word",
+      });
+    }
     // console.log("dropdown: value", event.target.textContent)
     setDropdownWord(event.target.textContent);
     // console.log("dropdown value:", dropdownWord)
