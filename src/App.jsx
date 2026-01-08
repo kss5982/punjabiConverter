@@ -332,6 +332,14 @@ function App() {
 
   const convertText = (event) => {
     event.preventDefault();
+    if (window.gtag) {
+      window.gtag("event", "convert_button", {
+        event_category: "Engagement",
+        event_label: "Convert Phonetic Punjabi",
+        button_name: "convert_phonetic",
+      });
+    }
+
     const phoneticTextarea = { payload: text };
     wordService
       .convert(phoneticTextarea)
