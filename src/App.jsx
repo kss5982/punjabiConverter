@@ -332,6 +332,7 @@ function App() {
 
   const convertText = (event) => {
     event.preventDefault();
+    // google analytics code to monitor text being converted
     if (window.gtag) {
       window.gtag("event", "convert_button", {
         event_category: "Engagement",
@@ -532,11 +533,20 @@ function App() {
       setCopyText("Copied!/ਕਾਪੀ ਹੋਗਿਆ!");
       setIsCopied(true);
 
-      // Revert button text after 2 seconds
+      // Revert button text after time has passed
       setTimeout(() => {
         setCopyText("Copy/ਪੰਜਾਬੀ ਕਾਪੀ ਕਰੋ");
         setIsCopied(false);
       }, 3500); // 3000 milliseconds = 3 seconds
+
+      // google analytics code to monitor text being converted
+      if (window.gtag) {
+        window.gtag("event", "copy_button", {
+          event_category: "Engagement",
+          event_label: "Copy Panjabi",
+          button_name: "copy_panjabi",
+        });
+      }
     } catch (err) {
       console.error("Failed to copy text: ", err);
       // Optionally, set an error message on the button
