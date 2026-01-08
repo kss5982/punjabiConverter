@@ -528,18 +528,8 @@ function App() {
   };
 
   const handleCopyClick = async () => {
-    try {
-      await navigator.clipboard.writeText(splitFinal.join(" "));
-      setCopyText("Copied!/ਕਾਪੀ ਹੋਗਿਆ!");
-      setIsCopied(true);
-
-      // Revert button text after time has passed
-      setTimeout(() => {
-        setCopyText("Copy/ਪੰਜਾਬੀ ਕਾਪੀ ਕਰੋ");
-        setIsCopied(false);
-      }, 3500); // 3000 milliseconds = 3 seconds
-
-      // google analytics code to monitor text being converted
+    if (splitFinal.join(" ") !== "") {
+      // google analytics code to monitor text being copied
       if (window.gtag) {
         window.gtag("event", "copy_button", {
           event_category: "Engagement",
@@ -547,11 +537,24 @@ function App() {
           button_name: "copy_panjabi",
         });
       }
-    } catch (err) {
-      console.error("Failed to copy text: ", err);
-      // Optionally, set an error message on the button
-      setCopyText("Error!");
-      setTimeout(() => setCopyText("Copy"), 2000);
+      try {
+        await navigator.clipboard.writeText(splitFinal.join(" "));
+        setCopyText("Copied!/ਕਾਪੀ ਹੋਗਿਆ!");
+        setIsCopied(true);
+
+        // Revert button text after time has passed
+        setTimeout(() => {
+          setCopyText("Copy/ਪੰਜਾਬੀ ਕਾਪੀ ਕਰੋ");
+          setIsCopied(false);
+        }, 3500); // 3000 milliseconds = 3 seconds
+      } catch (err) {
+        console.error("Failed to copy text: ", err);
+        // Optionally, set an error message on the button
+        setCopyText("Error!");
+        setTimeout(() => setCopyText("Copy"), 2000);
+      }
+    } else {
+      alert("No text to copy");
     }
   };
 
