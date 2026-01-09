@@ -416,7 +416,9 @@ function App() {
       // console.log("textarea word:", getTextareaWordAndDropdown(i, finalText))
       setSelectedConverted(getTextareaWordAndDropdown(i));
       setDropdownVisible(true);
-      setPosition({ x: event.clientX, y: event.clientY });
+      const x = event.pageX || (event.touches && event.touches[0].pageX);
+      const y = event.pageY || (event.touches && event.touches[0].pageY);
+      setPosition({ x: x, y: y });
     }
   };
 
