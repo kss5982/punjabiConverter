@@ -30,6 +30,7 @@ export default defineConfig({
           "https://www.google-analytics.com",
           "https://cdn.jsdelivr.net",
           "https://www.googletagmanager.com",
+          "https://analytics.google.com",
         ],
         "style-src-elem": ["'self'", "https://cdn.jsdelivr.net"], // Allow bootstrap stylesheet
         "img-src": ["'self'", "https://www.googletagmanager.com"],
