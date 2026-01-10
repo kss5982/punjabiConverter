@@ -32,6 +32,7 @@ export default defineConfig({
           "https://www.googletagmanager.com",
         ],
         "style-src-elem": ["'self'", "https://cdn.jsdelivr.net"], // Allow bootstrap stylesheet
+        "img-src": ["'self'", "https://www.googletagmanager.com"],
       },
     }),
   ],
