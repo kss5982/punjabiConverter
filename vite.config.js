@@ -16,17 +16,20 @@ export default defineConfig({
         "script-src-elem": [
           "'self'",
           "https://cdn.jsdelivr.net",
-          "https://www.googletagmanager.com/gtag/",
+          "https://www.googletagmanager.com",
+          "https://www.google-analytics.com",
         ],
         "script-src": [
           "'self'",
           "https://cdn.jsdelivr.net",
           "https://www.googletagmanager.com",
+          "https://www.google-analytics.com",
         ], // Example: Allow Google Analytics
         "connect-src": [
           "'self'",
           "https://www.google-analytics.com",
           "https://cdn.jsdelivr.net",
+          "https://www.googletagmanager.com",
         ],
         "style-src-elem": ["'self'", "https://cdn.jsdelivr.net"], // Allow bootstrap stylesheet
       },
