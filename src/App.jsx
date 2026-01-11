@@ -24,6 +24,7 @@ const Home = ({
   handleCopyClick,
   divRef,
   position,
+  isDisabled,
 }) => {
   return (
     <div className="container text-center">
@@ -49,8 +50,14 @@ Type or copy & paste Panjabi in this box (e.g. 'sat sri akal'), then press the '
               autoFocus
               required
             ></textarea>
-            <button className="btn btn-primary frontBtn" type="submit">
-              Convert/ਗੁਰਮੁਖੀ ਵਿੱਚ ਬਦਲੋ
+            <button
+              className="btn btn-primary frontBtn"
+              type="submit"
+              disabled={isDisabled}
+            >
+              {isDisabled
+                ? "Please Wait/ਸਬਰ ਕਰੋ ਜੀ"
+                : "Convert Text/ਗੁਰਮੁਖੀ ਵਿੱਚ ਬਦਲੋ"}
             </button>
           </form>
         </div>
@@ -317,6 +324,7 @@ function App() {
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isDisabled, setIsDisabled] = useState(false);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedViakaranUser");
@@ -332,6 +340,13 @@ function App() {
 
   const convertText = (event) => {
     event.preventDefault();
+
+    // disables button convert button for 5 seconds
+    setIsDisabled(true);
+    setTimeout(() => {
+      setIsDisabled(false);
+    }, 5000);
+
     // google analytics code to monitor text being converted
     if (window.gtag) {
       window.gtag("event", "convert_button", {
@@ -717,6 +732,7 @@ function App() {
               visible={dropdownVisible}
               divRef={divRef}
               position={position}
+              isDisabled={isDisabled}
             />
           }
         />
