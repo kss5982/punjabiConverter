@@ -12,10 +12,10 @@ convertRouter.post("/", async (req, res) => {
   const phoneticTextArr = await req.body.payload
     .trim()
     .toLowerCase()
-    .split(/( |\n|[_]|\b)/)
+    .split(/(\n|[ ]|[^a-zA-Z0-9\s])/)
     .filter((word) => word !== "" && word !== " ");
 
-  // console.log(phoneticTextArr);
+  console.log(phoneticTextArr);
   let copyOfPhoneticArray = phoneticTextArr.slice();
   // console.log(copyOfPhoneticArray);
   let convertedArrayObj = [];
@@ -121,8 +121,8 @@ convertRouter.post("/", async (req, res) => {
   let finalText = finalArray.join(" ");
   // console.log("before regex", finalText);
   finalText = finalText
-    .replace(/\s(?=!|\?|\.|:|,|\)|\]|\}|@|%|\^|\*|\+|_|~|।|॥|\/|\\|\|)/g, "") // removes space before character
-    .replace(/(?<=\(|\{|\[|#|\$|'|`|_|\n)\s/g, "") // removes space after character
+    .replace(/\s(?=!|\?|\.|:|,|\)|\]|\}|%|\^|\*|\+|_|~|।|॥|\/|\\|\|)/g, "") // removes space before character
+    .replace(/(?<=\(|\{|\[|#|\$|'|@|`|_|\n)\s/g, "") // removes space after character
     .replace(/" *([^"]*?) *"/g, '"$1"'); // removes spaces between quotes
 
   const finalObject = {
