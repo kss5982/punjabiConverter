@@ -12,7 +12,7 @@ convertRouter.post("/", async (req, res) => {
   const phoneticTextArr = await req.body.payload
     .trim()
     .toLowerCase()
-    .split(/(\n|[ ]|[^a-zA-Z0-9\s])/)
+    .split(/(\n|[ ]|[^a-zA-Z0-9\s])/) // old regex:  |\n|[_]|\b)/
     .filter((word) => word !== "" && word !== " ");
 
   console.log(phoneticTextArr);

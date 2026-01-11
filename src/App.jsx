@@ -493,13 +493,6 @@ function App() {
       copyDropdownMenu.splice(dropdownPosition, 1);
       copyDropdownMenu.splice(0, 0, onlyString.join(""));
       console.log("copyDropdownMenu: ", copyDropdownMenu);
-
-      // console.log("only string:", onlyString.join(""));
-      // console.log("copy selected", copySelected.join(""));
-      // console.log("first occurence of non-special char:", firstOccurrence);
-      // let convertedSplice = copySelected.splice(0, puncIndex);
-      // console.log("remaining punctuation:", copySelected);
-      // console.log("convertedSplice:", convertedSplice.join(""));
     } else {
       // replaces word in converted textarea w/ dropdown word
       console.log(index, dropdownWord);
