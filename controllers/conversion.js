@@ -15,7 +15,7 @@ convertRouter.post("/", async (req, res) => {
     .split(/(\n|[ ]|[^a-zA-Z0-9\s])/) // old regex:  |\n|[_]|\b)/
     .filter((word) => word !== "" && word !== " ");
 
-  console.log(phoneticTextArr);
+  // console.log(phoneticTextArr);
   let copyOfPhoneticArray = phoneticTextArr.slice();
   // console.log(copyOfPhoneticArray);
   let convertedArrayObj = [];

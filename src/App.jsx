@@ -44,7 +44,7 @@ const Home = ({
               onChange={handleTextChange}
               maxLength={2000}
               spellCheck="false"
-              placeholder="ਇਸ ਖ਼ਾਨੇ ਵਿੱਚ ਅੰਗਰੇਜ਼ੀ ਲਿਪੀ ਵਾਲ਼ੀ ਪੰਜਾਬੀ ਟਾਈਪ ਕਰੋ ਜਾਂ ਕਾਪੀ/ਪੇਸਟ ਕਰੋ (ਜਿਵੇਂ ਕਿ sat sri akal) ਕਨਵਰਟ ਬਟਨ ਦੱਬਣ ਨਾਲ਼ ਲਿਖਤ ਗੁਰਮੁਖੀ 'ਚ ਬਦਲ ਜਾਵੇਗੀ। ਬਦਲੇ ਹੋਏ ਗੁਰਮੁਖੀ ਲਫ਼ਜ਼ 'ਤੇ ਕਲਿੱਕ ਕਰਕੇ (sat ਤੋਂ ਸਤਿ, ਸਤ, ਸੱਤ, ਸੱਟ) ਕੋਈ ਵੀ ਲਫ਼ਜ਼ ਚੁਣ ਸਕਦੇ ਹਾਂ।
+              placeholder="ਇਸ ਖ਼ਾਨੇ ਵਿੱਚ ਅੰਗਰੇਜ਼ੀ ਲਿੱਪੀ ਵਾਲ਼ੀ ਪੰਜਾਬੀ ਟਾਈਪ ਕਰੋ ਜਾਂ ਕਾਪੀ/ਪੇਸਟ ਕਰੋ (ਜਿਵੇਂ ਕਿ sat sri akal) ਕਨਵਰਟ ਬਟਨ ਦੱਬਣ ਨਾਲ਼ ਲਿਖਤ ਗੁਰਮੁਖੀ 'ਚ ਬਦਲ ਜਾਵੇਗੀ। ਬਦਲੇ ਹੋਏ ਗੁਰਮੁਖੀ ਲਫ਼ਜ਼ 'ਤੇ ਕਲਿੱਕ ਕਰਕੇ (sat ਤੋਂ ਸਤਿ, ਸਤ, ਸੱਤ, ਸੱਟ) ਕੋਈ ਵੀ ਲਫ਼ਜ਼ ਚੁਣ ਸਕਦੇ ਹਾਂ।
 Type or copy & paste Panjabi in this box (e.g. 'sat sri akal'), then press the 'Convert' button. Words in the other box can be clicked to show more variations."
               autoComplete="off"
               autoFocus
