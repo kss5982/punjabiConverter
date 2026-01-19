@@ -55,10 +55,10 @@ Type or copy & paste Panjabi in this box (e.g. 'sat sri akal'), then press the '
               type="submit"
               disabled={isDisabled}
             >
-              {/* {isDisabled
+              {isDisabled
                 ? "Please Wait/ਸਬਰ ਕਰੋ ਜੀ"
-                : "Convert/ਗੁਰਮੁਖੀ ਵਿੱਚ ਬਦਲੋ"} */}
-              Convert/ਗੁਰਮੁਖੀ ਵਿੱਚ ਬਦਲੋ
+                : "Convert/ਗੁਰਮੁਖੀ ਵਿੱਚ ਬਦਲੋ"}
+              {/* Convert/ਗੁਰਮੁਖੀ ਵਿੱਚ ਬਦਲੋ */}
             </button>
           </form>
         </div>
