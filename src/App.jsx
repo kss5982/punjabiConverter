@@ -27,88 +27,90 @@ const Home = ({
   isDisabled,
 }) => {
   return (
-    <div className="container text-center">
-      <p className="description">
-        <em>A Phonetic Panjabi to Gurmukhi Transliteration Tool</em>
-      </p>
-      <div className="row justify-content-center">
-        <div className="col-md-5">
-          <form onSubmit={convertText} className="textareaForms">
-            <label className="frontLabel text-center" htmlFor="phonetic">
-              Phonetic Panjabi
+    <main>
+      <div className="container text-center">
+        <h1 className="description">
+          <em>A Phonetic Panjabi to Gurmukhi Transliteration Tool</em>
+        </h1>
+        <div className="row justify-content-center">
+          <div className="col-md-5">
+            <form onSubmit={convertText} className="textareaForms">
+              <label className="frontLabel text-center" htmlFor="phonetic">
+                Phonetic Panjabi
+              </label>
+              <textarea
+                id="phonetic"
+                className="frontTextarea form-control fs-3"
+                value={text}
+                onChange={handleTextChange}
+                maxLength={2000}
+                spellCheck="false"
+                placeholder="ਇਸ ਖ਼ਾਨੇ ਵਿੱਚ ਅੰਗਰੇਜ਼ੀ ਲਿੱਪੀ ਵਾਲ਼ੀ ਪੰਜਾਬੀ ਟਾਈਪ ਕਰੋ ਜਾਂ ਕਾਪੀ/ਪੇਸਟ ਕਰੋ (ਜਿਵੇਂ ਕਿ sat sri akal) ਕਨਵਰਟ ਬਟਨ ਦੱਬਣ ਨਾਲ਼ ਲਿਖਤ ਗੁਰਮੁਖੀ 'ਚ ਬਦਲ ਜਾਵੇਗੀ। ਬਦਲੇ ਹੋਏ ਗੁਰਮੁਖੀ ਲਫ਼ਜ਼ 'ਤੇ ਕਲਿੱਕ ਕਰਕੇ (sat ਤੋਂ ਸਤਿ, ਸਤ, ਸੱਤ, ਸੱਟ) ਕੋਈ ਵੀ ਲਫ਼ਜ਼ ਚੁਣ ਸਕਦੇ ਹਾਂ।
+Type or copy & paste Panjabi in this box (e.g. 'sat sri akal'), then press the 'Convert' button. Words in the other box can be clicked to show more variations."
+                autoComplete="off"
+                autoFocus
+                required
+              ></textarea>
+              <button
+                className="btn btn-primary frontBtn"
+                type="submit"
+                disabled={isDisabled}
+              >
+                {isDisabled
+                  ? "Please Wait/ਸਬਰ ਕਰੋ ਜੀ"
+                  : "Convert/ਗੁਰਮੁਖੀ ਵਿੱਚ ਬਦਲੋ"}
+                {/* Convert/ਗੁਰਮੁਖੀ ਵਿੱਚ ਬਦਲੋ */}
+              </button>
+            </form>
+          </div>
+          <div className="col-md-5">
+            <label htmlFor="converted" className="frontLabel">
+              Gurmukhi Script
             </label>
             <textarea
-              id="phonetic"
               className="frontTextarea form-control fs-3"
-              value={text}
-              onChange={handleTextChange}
-              maxLength={2000}
+              id="converted"
+              value={finalText}
+              onClick={handleTextClick}
+              cols="30"
+              rows="6"
               spellCheck="false"
-              placeholder="ਇਸ ਖ਼ਾਨੇ ਵਿੱਚ ਅੰਗਰੇਜ਼ੀ ਲਿੱਪੀ ਵਾਲ਼ੀ ਪੰਜਾਬੀ ਟਾਈਪ ਕਰੋ ਜਾਂ ਕਾਪੀ/ਪੇਸਟ ਕਰੋ (ਜਿਵੇਂ ਕਿ sat sri akal) ਕਨਵਰਟ ਬਟਨ ਦੱਬਣ ਨਾਲ਼ ਲਿਖਤ ਗੁਰਮੁਖੀ 'ਚ ਬਦਲ ਜਾਵੇਗੀ। ਬਦਲੇ ਹੋਏ ਗੁਰਮੁਖੀ ਲਫ਼ਜ਼ 'ਤੇ ਕਲਿੱਕ ਕਰਕੇ (sat ਤੋਂ ਸਤਿ, ਸਤ, ਸੱਤ, ਸੱਟ) ਕੋਈ ਵੀ ਲਫ਼ਜ਼ ਚੁਣ ਸਕਦੇ ਹਾਂ।
-Type or copy & paste Panjabi in this box (e.g. 'sat sri akal'), then press the 'Convert' button. Words in the other box can be clicked to show more variations."
               autoComplete="off"
-              autoFocus
-              required
+              readOnly
             ></textarea>
             <button
-              className="btn btn-primary frontBtn"
-              type="submit"
-              disabled={isDisabled}
+              id="copy"
+              className="btn btn-secondary frontBtn"
+              type="button"
+              onClick={handleCopyClick}
             >
-              {isDisabled
-                ? "Please Wait/ਸਬਰ ਕਰੋ ਜੀ"
-                : "Convert/ਗੁਰਮੁਖੀ ਵਿੱਚ ਬਦਲੋ"}
-              {/* Convert/ਗੁਰਮੁਖੀ ਵਿੱਚ ਬਦਲੋ */}
+              {copyText}
             </button>
-          </form>
-        </div>
-        <div className="col-md-5">
-          <label htmlFor="converted" className="frontLabel">
-            Gurmukhi Script
-          </label>
-          <textarea
-            className="frontTextarea form-control fs-3"
-            id="converted"
-            value={finalText}
-            onClick={handleTextClick}
-            cols="30"
-            rows="6"
-            spellCheck="false"
-            autoComplete="off"
-            readOnly
-          ></textarea>
-          <button
-            id="copy"
-            className="btn btn-secondary frontBtn"
-            type="button"
-            onClick={handleCopyClick}
-          >
-            {copyText}
-          </button>
-          <div
-            ref={divRef}
-            style={{
-              width: "fit-content",
-              top: position.y + 10,
-              left: position.x - 10,
-            }}
-            className="dropdownContainer"
-          >
-            {visible &&
-              selectedDropdown &&
-              selectedDropdown.map((dropDownItem, i) => (
-                <div
-                  className="dropdownItem fs-2"
-                  key={i}
-                  onClick={handleDropDownClick}
-                >
-                  <strong>{dropDownItem}</strong>
-                </div>
-              ))}
+            <div
+              ref={divRef}
+              style={{
+                width: "fit-content",
+                top: position.y + 10,
+                left: position.x - 10,
+              }}
+              className="dropdownContainer"
+            >
+              {visible &&
+                selectedDropdown &&
+                selectedDropdown.map((dropDownItem, i) => (
+                  <div
+                    className="dropdownItem fs-2"
+                    key={i}
+                    onClick={handleDropDownClick}
+                  >
+                    <strong>{dropDownItem}</strong>
+                  </div>
+                ))}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 
@@ -487,14 +489,14 @@ function App() {
           }
           console.log(
             "copy selected index value:",
-            selectedConverted.split("")[i]
+            selectedConverted.split("")[i],
           );
           console.log("index:", i);
           onlyString.push(
             copySelected.splice(
               copySelected.indexOf(selectedConverted.split("")[i]),
-              1
-            )
+              1,
+            ),
           );
         }
       }
@@ -661,7 +663,7 @@ function App() {
 
   const filterList = (words, criteria) => {
     const filtered = words.filter((word) =>
-      word.phonetic.toLowerCase().startsWith(criteria.toLowerCase())
+      word.phonetic.toLowerCase().startsWith(criteria.toLowerCase()),
     );
     return filtered;
   };
